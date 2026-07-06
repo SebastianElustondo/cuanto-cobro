@@ -1,0 +1,365 @@
+/* ¿Cuánto cobro? — estilos. Mobile-first, dark-mode friendly. */
+
+:root {
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --text: #1c2430;
+  --text-muted: #5b6675;
+  --accent: #1a6b54;
+  --accent-soft: #e2f2ec;
+  --border: #dde3ea;
+  --result-bg: #f0f7f4;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(16, 24, 40, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12161c;
+    --surface: #1b212a;
+    --text: #e8ecf1;
+    --text-muted: #9aa5b1;
+    --accent: #4fbf9a;
+    --accent-soft: #1e3a31;
+    --border: #2b333f;
+    --result-bg: #1e2b26;
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.container {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Header */
+.site-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 2rem 0 1.75rem;
+  text-align: center;
+}
+
+.brand {
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  margin-bottom: 0.5rem;
+}
+
+h1 {
+  font-size: 1.6rem;
+  line-height: 1.25;
+  margin-bottom: 0.6rem;
+}
+
+.subtitle {
+  color: var(--text-muted);
+  max-width: 56ch;
+  margin: 0 auto;
+}
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+}
+
+.card h2 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.card > p {
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+}
+
+/* Cotizaciones */
+.rates-status {
+  color: var(--text-muted);
+}
+
+.rates-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin: 0.5rem 0 0.75rem;
+}
+
+.rate-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  align-items: center;
+  padding: 0.75rem 0.4rem;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.rate-card:hover {
+  border-color: var(--accent);
+}
+
+.rate-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.rate-name {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.rate-value {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.rate-detail {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.rates-updated {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.manual-rate {
+  margin-top: 0.75rem;
+}
+
+.hint {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+}
+
+/* Ad slot placeholder */
+.ad-slot {
+  margin: 1.25rem 0;
+  min-height: 90px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Forms */
+.calc-form {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.field label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.label-note {
+  font-weight: 400;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+input[type="number"],
+select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+input[type="number"]:focus,
+select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.input-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.input-group input {
+  flex: 1;
+}
+
+.input-group select {
+  width: auto;
+  flex: 0 0 auto;
+}
+
+/* Results */
+.result {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  background: var(--result-bg);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.result-line {
+  font-size: 1.05rem;
+}
+
+.result-line strong {
+  color: var(--accent);
+  font-size: 1.15em;
+}
+
+.result-note {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+/* Table */
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  min-width: 480px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+thead th {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+tbody th {
+  font-weight: 600;
+}
+
+.disclaimer {
+  margin-top: 0.9rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  border-left: 3px solid var(--border);
+  padding-left: 0.75rem;
+}
+
+/* Prose / SEO content */
+.prose h3 {
+  font-size: 1rem;
+  margin: 1rem 0 0.35rem;
+}
+
+.prose p {
+  margin-bottom: 0.65rem;
+  color: var(--text);
+}
+
+.prose > p {
+  color: var(--text);
+}
+
+/* FAQ */
+details {
+  border-bottom: 1px solid var(--border);
+  padding: 0.6rem 0;
+}
+
+details:last-of-type {
+  border-bottom: none;
+}
+
+summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+details p {
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+}
+
+/* Footer */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem 0 2.5rem;
+  margin-top: 2rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.site-footer a {
+  color: var(--accent);
+}
+
+/* Desktop */
+@media (min-width: 600px) {
+  h1 {
+    font-size: 2rem;
+  }
+
+  .card {
+    padding: 1.75rem;
+  }
+
+  .calc-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .calc-form .field:only-child,
+  #form-inversa .field:first-child {
+    grid-column: 1 / -1;
+  }
+}
