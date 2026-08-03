@@ -149,8 +149,20 @@
     var horasSemana = parseInput($("horas-semana-conv"));
     var rate = currentRate();
 
-    if (!usdHora || !rate) {
+    if (!usdHora) {
       out.hidden = true;
+      return;
+    }
+
+    // Hay tarifa pero todavía no hay cotización: avisar en vez de quedarse mudo.
+    if (!rate) {
+      $("conv-ars-hora").textContent = "—";
+      $("conv-ars-mes").textContent = "—";
+      $("conv-usd-mes").textContent = "";
+      $("conv-cotizacion-usada").textContent = state.apiOk
+        ? "Tocá una cotización arriba para calcular."
+        : "Esperando la cotización del dólar… Si no carga, ingresala manualmente arriba.";
+      out.hidden = false;
       return;
     }
 
