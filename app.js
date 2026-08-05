@@ -139,14 +139,32 @@
     items = items.concat(extras);
     if (!items.length) return;
 
-    var html = items.map(function (it) {
+    var base = items.map(function (it) {
       return '<span class="t-item"><span class="t-nombre">' + it.nombre +
         '</span><span class="t-valor">' + fmtARS(it.venta) + "</span></span>";
     }).join("");
-    // contenido duplicado: la animación corre hasta -50% y el loop queda continuo
-    $("ticker-pista").innerHTML = html + html;
+
+    // La animación corre hasta -50%, así que cada mitad tiene que cubrir al
+    // menos el ancho de la ventana o queda un hueco al final del loop.
+    var pista = $("ticker-pista");
+    pista.innerHTML = base;
     $("ticker").hidden = false;
+    var anchoBase = pista.scrollWidth || 1;
+    var copias = Math.max(1, Math.ceil((window.innerWidth * 1.25) / anchoBase));
+    var mitad = new Array(copias + 1).join(base);
+    pista.innerHTML = mitad + mitad;
+    // velocidad constante (~30 px/s) sin importar el ancho de pantalla
+    pista.style.animationDuration = Math.round((anchoBase * copias) / 30) + "s";
+    state.tickerAncho = anchoBase;
   }
+
+  // si agrandan la ventana, la tanda puede quedar corta: rearmar
+  var tickerResizeTimer = null;
+  window.addEventListener("resize", function () {
+    if (!state.tickerAncho) return;
+    clearTimeout(tickerResizeTimer);
+    tickerResizeTimer = setTimeout(function () { loadMonedas(); }, 400);
+  });
 
   function renderFranja() {
     var partes = [];
