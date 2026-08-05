@@ -98,6 +98,7 @@
         state.fechaRates = latest ? new Date(latest) : null;
         renderFranja();
         renderSelect();
+        loadMonedas();
       })
       .catch(function () {
         $("franja-valores").textContent =
@@ -107,6 +108,44 @@
         if (timer) clearTimeout(timer);
         recalcAll();
       });
+  }
+
+  // ---------- Ticker: los tres dólares + euro y real ----------
+
+  function loadMonedas() {
+    fetch("https://dolarapi.com/v1/cotizaciones")
+      .then(function (res) { return res.ok ? res.json() : []; })
+      .then(function (data) {
+        var extras = [];
+        if (Array.isArray(data)) {
+          data.forEach(function (item) {
+            if (!item || !isFinite(item.venta)) return;
+            if (item.moneda === "EUR") extras.push({ nombre: "Euro", venta: item.venta });
+            if (item.moneda === "BRL") extras.push({ nombre: "Real", venta: item.venta });
+          });
+        }
+        renderTicker(extras);
+      })
+      .catch(function () { renderTicker([]); });
+  }
+
+  function renderTicker(extras) {
+    var items = [];
+    var nombresTicker = { blue: "Dólar blue", bolsa: "Dólar MEP", oficial: "Dólar oficial" };
+    CASAS.forEach(function (casa) {
+      var r = state.rates[casa];
+      if (r) items.push({ nombre: nombresTicker[casa], venta: r.venta });
+    });
+    items = items.concat(extras);
+    if (!items.length) return;
+
+    var html = items.map(function (it) {
+      return '<span class="t-item"><span class="t-nombre">' + it.nombre +
+        '</span><span class="t-valor">' + fmtARS(it.venta) + "</span></span>";
+    }).join("");
+    // contenido duplicado: la animación corre hasta -50% y el loop queda continuo
+    $("ticker-pista").innerHTML = html + html;
+    $("ticker").hidden = false;
   }
 
   function renderFranja() {
