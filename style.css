@@ -68,6 +68,55 @@ a {
   display: none !important;
 }
 
+/* ---------- Ticker de cotizaciones ---------- */
+
+.ticker {
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--linea);
+  padding: 0.38rem 0;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+}
+
+.ticker-pista {
+  display: inline-block;
+  animation: ticker 70s linear infinite;
+  will-change: transform;
+}
+
+.ticker:hover .ticker-pista {
+  animation-play-state: paused;
+}
+
+.ticker .t-item {
+  display: inline-block;
+  margin-right: 2.6rem;
+}
+
+.ticker .t-nombre {
+  color: var(--gris);
+  font-family: var(--font-sans);
+  margin-right: 0.45rem;
+}
+
+.ticker .t-valor {
+  color: var(--tinta);
+  font-weight: 600;
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker { overflow-x: auto; }
+  .ticker-pista { animation: none; }
+}
+
 /* ---------- Cabecera ---------- */
 
 .cabecera {
