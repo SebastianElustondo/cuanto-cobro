@@ -99,6 +99,49 @@
       });
   }
 
+  // ---------- Tablero split-flap ----------
+
+  var MOTION_OK = !(window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+  // Cada dígito es una celda que "gira" ciclando números hasta asentarse,
+  // como los tableros de aeropuerto. Separadores y símbolo no giran.
+  function flapValue(el, venta) {
+    var texto = Math.round(venta).toLocaleString("es-AR");
+    el.textContent = "";
+    var moneda = document.createElement("span");
+    moneda.className = "flap flap-moneda";
+    moneda.textContent = "$";
+    el.appendChild(moneda);
+    texto.split("").forEach(function (ch, i) {
+      var celda = document.createElement("span");
+      if (ch < "0" || ch > "9") {
+        celda.className = "flap flap-sep";
+        celda.textContent = ch;
+        el.appendChild(celda);
+        return;
+      }
+      celda.className = "flap";
+      celda.textContent = MOTION_OK ? "0" : ch;
+      el.appendChild(celda);
+      if (MOTION_OK) animarFlap(celda, ch, i);
+    });
+  }
+
+  function animarFlap(celda, destino, orden) {
+    var vueltas = 5 + orden * 3 + Math.floor(Math.random() * 4);
+    var n = 0;
+    var timer = setInterval(function () {
+      n++;
+      if (n >= vueltas) {
+        clearInterval(timer);
+        celda.textContent = destino;
+      } else {
+        celda.textContent = String(Math.floor(Math.random() * 10));
+      }
+    }, 55);
+  }
+
   function renderRates() {
     $("rates-status").hidden = true;
     $("rates-grid").hidden = false;
@@ -108,7 +151,7 @@
     CASAS.forEach(function (casa) {
       var r = state.rates[casa];
       if (!r) return;
-      $("rate-" + casa).textContent = fmtARS(r.venta);
+      flapValue($("rate-" + casa), r.venta);
       $("rate-" + casa + "-detail").textContent = "compra " + fmtARS(r.compra);
       if (r.fecha && (!latest || r.fecha > latest)) latest = r.fecha;
     });
