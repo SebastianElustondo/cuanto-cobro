@@ -116,12 +116,16 @@
     fetch("https://dolarapi.com/v1/cotizaciones")
       .then(function (res) { return res.ok ? res.json() : []; })
       .then(function (data) {
+        var MONEDAS = { EUR: "Euro", BRL: "Real", UYU: "Peso uruguayo", CLP: "Peso chileno" };
+        var orden = ["EUR", "BRL", "UYU", "CLP"];
         var extras = [];
         if (Array.isArray(data)) {
-          data.forEach(function (item) {
-            if (!item || !isFinite(item.venta)) return;
-            if (item.moneda === "EUR") extras.push({ nombre: "Euro", venta: item.venta });
-            if (item.moneda === "BRL") extras.push({ nombre: "Real", venta: item.venta });
+          orden.forEach(function (cod) {
+            data.forEach(function (item) {
+              if (item && item.moneda === cod && isFinite(item.venta)) {
+                extras.push({ nombre: MONEDAS[cod], venta: item.venta });
+              }
+            });
           });
         }
         renderTicker(extras);
@@ -139,9 +143,17 @@
     items = items.concat(extras);
     if (!items.length) return;
 
+    // monedas chicas (peso chileno ~$1,50) necesitan decimales
+    function fmtTicker(v) {
+      return v.toLocaleString("es-AR", {
+        style: "currency",
+        currency: "ARS",
+        maximumFractionDigits: v < 100 ? 2 : 0
+      });
+    }
     var base = items.map(function (it) {
       return '<span class="t-item"><span class="t-nombre">' + it.nombre +
-        '</span><span class="t-valor">' + fmtARS(it.venta) + "</span></span>";
+        '</span><span class="t-valor">' + fmtTicker(it.venta) + "</span></span>";
     }).join("");
 
     // La animación corre hasta -50%, así que cada mitad tiene que cubrir al
