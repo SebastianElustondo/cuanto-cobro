@@ -20,12 +20,23 @@
   <meta name="twitter:title" content="¿Cuánto cobro? — Calculadora de tarifas freelance Argentina">
   <meta name="twitter:description" content="Dólar al día, conversor USD ↔ ARS y tarifas de referencia por rubro.">
   <meta name="twitter:image" content="https://cobro.quovra.com/og.png">
-  <meta name="theme-color" content="#0e1813">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%230e1813'/%3E%3Crect x='10' y='12' width='44' height='40' rx='5' fill='%23131f18' stroke='%2353d68a' stroke-width='2'/%3E%3Cline x1='10' y1='32' x2='54' y2='32' stroke='%230e1813' stroke-width='3'/%3E%3Ctext x='32' y='42' font-family='Courier New,monospace' font-size='30' font-weight='700' fill='%2353d68a' text-anchor='middle'%3E$%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#faf6ec">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23faf6ec'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%232e7d54' text-anchor='middle'%3E$%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&amp;family=IBM+Plex+Mono:wght@500;600;700&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&amp;family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>
+    // aplicar el tema guardado antes del primer render para evitar el destello
+    (function () {
+      try {
+        var t = localStorage.getItem("cc-tema");
+        if (t === "oscuro" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          document.documentElement.setAttribute("data-tema", "oscuro");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -77,127 +88,162 @@
 </head>
 <body>
 
-  <!-- Marquesina: la tira de "CAMBIO CAMBIO" de la city -->
-  <div class="marquesina" aria-hidden="true">
-    <span>cambio · cambio · dólar · cambio · cambio · dólar · cambio · cambio · dólar · cambio · cambio · dólar · cambio · cambio · dólar · cambio</span>
-  </div>
-
-  <header class="letrero">
-    <div class="container">
-      <p class="brand">¿cuánto cobro?</p>
-      <h1>Calculadora de tarifas para freelancers argentinos</h1>
-      <p class="subtitle">Convertí tu tarifa en dólares a pesos con la cotización del día, o calculá cuánto tenés que cobrar por hora para ganar lo que querés por mes.</p>
-      <svg class="tiza-subrayado" viewBox="0 0 300 12" preserveAspectRatio="none" aria-hidden="true"><path d="M4 8 C60 4, 140 10, 296 5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" opacity=".7"/></svg>
+  <header class="cabecera">
+    <div class="container cabecera-fila">
+      <p class="marca">¿cuánto cobro?</p>
+      <nav class="nav" aria-label="Secciones">
+        <a href="#como-funciona">Cómo funciona</a>
+        <a href="#cotizaciones">Cotizaciones</a>
+        <button type="button" id="btn-tema" aria-label="Cambiar entre modo claro y oscuro">◐</button>
+      </nav>
     </div>
   </header>
 
   <main>
     <div class="container">
 
-      <!-- Tablero de cotizaciones: el pizarrón de la casa de cambio -->
-      <section id="cotizaciones" class="tablero" aria-labelledby="cotizaciones-titulo">
-        <div class="tablero-cabecera">
-          <h2 id="cotizaciones-titulo">Cotización del dólar hoy</h2>
-          <span class="luz-vivo" id="luz-vivo" aria-hidden="true"></span>
-        </div>
-        <p class="rates-status" id="rates-status">Cargando cotizaciones…</p>
-        <div class="rates-grid" id="rates-grid" hidden>
-          <button type="button" class="rate-card" data-casa="blue">
-            <span class="rate-name">Blue<i class="rate-tier">el de la calle</i></span>
-            <span class="rate-value flap-row" id="rate-blue">—</span>
-            <span class="rate-detail" id="rate-blue-detail"></span>
-          </button>
-          <button type="button" class="rate-card" data-casa="oficial">
-            <span class="rate-name">Oficial<i class="rate-tier">el del banco</i></span>
-            <span class="rate-value flap-row" id="rate-oficial">—</span>
-            <span class="rate-detail" id="rate-oficial-detail"></span>
-          </button>
-          <button type="button" class="rate-card" data-casa="bolsa">
-            <span class="rate-name">MEP<i class="rate-tier">el de la bolsa</i></span>
-            <span class="rate-value flap-row" id="rate-bolsa">—</span>
-            <span class="rate-detail" id="rate-bolsa-detail"></span>
-          </button>
-        </div>
-        <p class="rates-updated" id="rates-updated"></p>
-
-        <!-- Fallback manual si la API no responde -->
-        <div class="manual-rate" id="manual-rate" hidden>
-          <label for="manual-rate-input">Ingresá la cotización manualmente (ARS por USD):</label>
-          <input type="number" id="manual-rate-input" inputmode="decimal" min="0" step="any" placeholder="Ej: 1500">
-        </div>
-        <p class="hint" id="rate-hint" hidden>Tocá una cotización para usarla en las calculadoras. Estás usando: <strong id="selected-rate-label">—</strong></p>
+      <!-- Hero compacto: la promesa y enseguida la herramienta -->
+      <section class="hero">
+        <h1>Poné un precio a tu trabajo.</h1>
+        <p class="hero-bajada">Calculadora de tarifas para freelancers argentinos: convertí una tarifa en dólares o calculá cuánto cobrar por hora para alcanzar tu objetivo mensual, con supuestos que podés revisar.</p>
+        <svg class="trazo" viewBox="0 0 220 10" preserveAspectRatio="none" aria-hidden="true"><path d="M3 7 C55 3, 150 8, 217 4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
       </section>
 
-      <!-- Ventanilla 1: conversor -->
-      <section class="ventanilla" aria-labelledby="conversor-titulo">
-        <p class="ventanilla-num" aria-hidden="true">Ventanilla 01</p>
-        <h2 id="conversor-titulo">Conversor de tarifa: de USD por hora a pesos</h2>
-        <p class="section-lead">Ingresá tu tarifa por hora en dólares y mirá cuánto representa en pesos argentinos según la cotización seleccionada.</p>
-        <form id="form-conversor" class="calc-form" novalidate>
-          <div class="field">
-            <label for="usd-hora">Tu tarifa por hora (USD)</label>
-            <input type="number" id="usd-hora" inputmode="decimal" min="0" step="any" placeholder="Ej: 25">
-          </div>
-          <div class="field">
-            <label for="horas-semana-conv">Horas facturadas por semana</label>
-            <input type="number" id="horas-semana-conv" inputmode="decimal" min="0" max="100" step="any" value="30">
-          </div>
-        </form>
-        <div class="result" id="resultado-conversor" hidden>
-          <p class="result-line">Por hora: <strong id="conv-ars-hora">—</strong></p>
-          <p class="result-line result-line-secondary">Por mes (aprox.): <strong id="conv-ars-mes">—</strong> <span class="result-note" id="conv-usd-mes"></span></p>
-          <p class="result-note" id="conv-cotizacion-usada"></p>
+      <!-- Calculadora principal -->
+      <section class="calculadora" aria-label="Calculadora">
+        <div class="tabs" role="tablist" aria-label="Qué querés calcular">
+          <button type="button" class="tab on" id="tab-convertir" role="tab" aria-selected="true" aria-controls="panel-convertir">Convertir una tarifa</button>
+          <button type="button" class="tab" id="tab-hora" role="tab" aria-selected="false" aria-controls="panel-hora">Calcular mi valor por hora</button>
         </div>
-      </section>
 
-      <!-- Ventanilla 2: calculadora inversa -->
-      <section class="ventanilla" aria-labelledby="inversa-titulo">
-        <p class="ventanilla-num" aria-hidden="true">Ventanilla 02</p>
-        <h2 id="inversa-titulo">Calculadora inversa: ¿cuánto tengo que cobrar por hora?</h2>
-        <p class="section-lead">Definí cuánto querés ganar por mes y cuántas horas podés trabajar: te decimos la tarifa por hora que necesitás.</p>
-        <form id="form-inversa" class="calc-form" novalidate>
-          <div class="field">
-            <label for="objetivo-monto">Quiero ganar por mes</label>
-            <div class="input-group">
-              <input type="number" id="objetivo-monto" inputmode="decimal" min="0" step="any" placeholder="Ej: 2000">
-              <select id="objetivo-moneda" aria-label="Moneda del objetivo mensual">
-                <option value="USD" selected>USD</option>
-                <option value="ARS">ARS</option>
+        <!-- Panel 1: convertir USD → ARS -->
+        <div class="panel" id="panel-convertir" role="tabpanel" aria-labelledby="tab-convertir">
+          <div class="campos">
+            <div class="campo">
+              <label for="monto">Monto en dólares</label>
+              <div class="campo-grupo">
+                <input type="number" id="monto" inputmode="decimal" min="0" step="any" placeholder="1.000">
+                <span class="sufijo">USD</span>
+              </div>
+              <p class="campo-nota">Puede ser tu tarifa por hora, un proyecto o un sueldo mensual.</p>
+            </div>
+            <div class="campo">
+              <label for="casa-cambio">Tipo de cambio</label>
+              <select id="casa-cambio">
+                <option value="blue" selected>Dólar blue (vendedor)</option>
+                <option value="bolsa">Dólar MEP (vendedor)</option>
+                <option value="oficial">Dólar oficial (vendedor)</option>
+                <option value="personalizado">Personalizado…</option>
               </select>
+              <div class="campo-grupo oculto" id="grupo-manual">
+                <input type="number" id="cambio-manual" inputmode="decimal" min="0" step="any" placeholder="1.500">
+                <span class="sufijo">ARS/USD</span>
+              </div>
+            </div>
+            <div class="campo">
+              <label for="comision">Comisión o impuestos <span class="opcional">(opcional)</span></label>
+              <div class="campo-grupo campo-corto">
+                <input type="number" id="comision" inputmode="decimal" min="0" max="99" step="any" placeholder="0">
+                <span class="sufijo">%</span>
+              </div>
+              <p class="campo-nota">Lo que se pierde entre plataforma, transferencia o retenciones.</p>
             </div>
           </div>
-          <div class="field">
-            <label for="horas-semana-inv">Horas de trabajo por semana</label>
-            <input type="number" id="horas-semana-inv" inputmode="decimal" min="0" max="100" step="any" value="35">
+
+          <div class="resultado" id="resultado-convertir" hidden>
+            <p class="resultado-etiqueta">Recibirías</p>
+            <p class="resultado-cifra"><span id="conv-resultado">—</span></p>
+            <p class="resultado-detalle" id="conv-detalle"></p>
           </div>
-          <div class="field">
-            <label for="pct-facturable">% de horas facturables <span class="label-note">(el resto se va en buscar clientes y administrar)</span></label>
-            <input type="number" id="pct-facturable" inputmode="numeric" min="1" max="100" step="1" value="75">
+        </div>
+
+        <!-- Panel 2: calculadora inversa -->
+        <div class="panel oculto" id="panel-hora" role="tabpanel" aria-labelledby="tab-hora" hidden>
+          <div class="campos">
+            <div class="campo">
+              <label for="objetivo-monto">Ingreso mensual deseado</label>
+              <div class="campo-grupo">
+                <input type="number" id="objetivo-monto" inputmode="decimal" min="0" step="any" placeholder="2.000">
+                <select id="objetivo-moneda" aria-label="Moneda del objetivo mensual">
+                  <option value="USD" selected>USD</option>
+                  <option value="ARS">ARS</option>
+                </select>
+              </div>
+            </div>
+            <div class="campo">
+              <label for="horas-semana">Horas facturables por semana</label>
+              <div class="campo-grupo campo-corto">
+                <input type="number" id="horas-semana" inputmode="decimal" min="1" max="80" step="any" value="25">
+                <span class="sufijo">hs</span>
+              </div>
+              <p class="campo-nota">Las que realmente cobrás: buscar clientes y administrar no cuentan.</p>
+            </div>
+            <div class="campo">
+              <label for="vacaciones">Vacaciones al año <span class="opcional">(opcional)</span></label>
+              <div class="campo-grupo campo-corto">
+                <input type="number" id="vacaciones" inputmode="numeric" min="0" max="120" step="1" value="15">
+                <span class="sufijo">días</span>
+              </div>
+            </div>
+            <div class="campo">
+              <label for="gastos">Gastos mensuales del trabajo <span class="opcional">(opcional)</span></label>
+              <div class="campo-grupo">
+                <input type="number" id="gastos" inputmode="decimal" min="0" step="any" placeholder="0">
+                <span class="sufijo" id="gastos-moneda">USD</span>
+              </div>
+              <p class="campo-nota">Monotributo, herramientas, equipo, coworking.</p>
+            </div>
+            <div class="campo">
+              <label for="margen">Margen de seguridad <span class="opcional">(opcional)</span></label>
+              <div class="campo-grupo campo-corto">
+                <input type="number" id="margen" inputmode="decimal" min="0" max="100" step="any" value="10">
+                <span class="sufijo">%</span>
+              </div>
+              <p class="campo-nota">Colchón para meses flojos, imprevistos o clientes que pagan tarde.</p>
+            </div>
           </div>
-        </form>
-        <div class="result" id="resultado-inversa" hidden>
-          <p class="result-line">Necesitás cobrar: <strong id="inv-tarifa">—</strong> por hora</p>
-          <p class="result-note" id="inv-detalle"></p>
+
+          <div class="resultado" id="resultado-hora" hidden>
+            <p class="resultado-etiqueta">Tu tarifa sugerida</p>
+            <p class="resultado-cifra"><span id="inv-resultado">—</span><span class="resultado-unidad"> por hora</span></p>
+            <p class="resultado-detalle" id="inv-detalle"></p>
+          </div>
+        </div>
+
+        <!-- Acciones sobre el resultado -->
+        <div class="acciones" id="acciones" hidden>
+          <button type="button" id="btn-copiar">Copiar resultado</button>
+          <button type="button" id="btn-enlace">Copiar enlace</button>
+          <span class="aviso-copiado" id="aviso-copiado" aria-live="polite"></span>
         </div>
       </section>
 
-      <!--
-        ============ AdSense placeholder ============
-        Reemplazar este bloque por el snippet real de Google AdSense
-        una vez aprobado el sitio. Formato sugerido: responsive display.
-        <ins class="adsbygoogle" ...></ins>
-      -->
-      <div class="ad-slot" aria-hidden="true" style="display:none">
-        <span>Publicidad</span>
-      </div>
-      <!-- ============ /AdSense placeholder ============ -->
+      <!-- Cotizaciones: franja compacta, secundaria -->
+      <section id="cotizaciones" class="franja-cotizaciones" aria-label="Cotizaciones del dólar hoy">
+        <p class="franja-valores" id="franja-valores">Cargando cotizaciones…</p>
+        <p class="franja-meta" id="franja-meta"></p>
+        <details class="franja-info">
+          <summary>Sobre las cotizaciones</summary>
+          <p><strong>Blue:</strong> el dólar informal, referencia habitual si convertís por fuera del sistema bancario. <strong>MEP:</strong> el que se obtiene comprando y vendiendo bonos en el mercado de capitales; es legal y suele estar cerca del blue. <strong>Oficial:</strong> el de los bancos, aplica si liquidás al tipo de cambio oficial. Los valores llegan en vivo desde <a href="https://dolarapi.com" rel="noopener" target="_blank">DolarApi.com</a>; usamos el precio vendedor. Si la fuente no responde, elegí "Personalizado" e ingresá el valor a mano.</p>
+        </details>
+      </section>
 
-      <div class="tiza-regla" aria-hidden="true"></div>
+      <div class="separador" aria-hidden="true"></div>
+
+      <!-- Qué estamos calculando: transparencia de la fórmula -->
+      <section id="como-funciona" class="prosa" aria-labelledby="como-titulo">
+        <h2 id="como-titulo">Qué estamos calculando</h2>
+        <p><strong>Convertir una tarifa:</strong> multiplicamos tu monto en dólares por el tipo de cambio elegido y, si cargaste una comisión, la descontamos. Nada más: monto × cotización − comisión.</p>
+        <p><strong>Tu valor por hora:</strong> sumamos tu ingreso deseado y tus gastos del trabajo, le agregamos el margen de seguridad y lo dividimos por tus horas facturables reales del mes. Las horas del mes salen de tus horas semanales, descontando las semanas de vacaciones que indicaste (año de 52 semanas, vacaciones en días hábiles).</p>
+        <p class="referencia"><strong>Esto es una referencia.</strong> No reemplaza asesoramiento contable ni impositivo, y las cotizaciones cambian todos los días. Usá el resultado como punto de partida para tu propia decisión.</p>
+      </section>
+
+      <div class="separador" aria-hidden="true"></div>
 
       <!-- Tarifas de referencia -->
-      <section aria-labelledby="referencia-titulo">
+      <section aria-labelledby="referencia-titulo" class="prosa">
         <h2 id="referencia-titulo">Tarifas de referencia por rubro</h2>
-        <p class="section-lead">Rangos habituales en USD por hora para freelancers argentinos que trabajan con clientes del exterior. Para clientes locales, los valores suelen ser entre 30% y 50% menores.</p>
+        <p class="seccion-bajada">Rangos habituales en USD por hora para freelancers argentinos que trabajan con clientes del exterior. Para clientes locales, los valores suelen ser entre 30% y 50% menores.</p>
         <div class="table-wrap">
           <table>
             <thead>
@@ -236,29 +282,29 @@
             </tbody>
           </table>
         </div>
-        <p class="disclaimer"><strong>Aviso:</strong> estos valores son estimativos y orientativos. No surgen de un relevamiento formal: son rangos habituales del mercado freelance y pueden variar mucho según experiencia, portfolio, nicho, idioma y país del cliente. Usalos solo como punto de partida para tu propia investigación.</p>
+        <p class="nota-chica"><strong>Aviso:</strong> estos valores son estimativos y orientativos. No surgen de un relevamiento formal: son rangos habituales del mercado freelance y pueden variar mucho según experiencia, portfolio, nicho, idioma y país del cliente. Usalos solo como punto de partida para tu propia investigación.</p>
       </section>
 
-      <div class="tiza-regla" aria-hidden="true"></div>
+      <div class="separador" aria-hidden="true"></div>
 
       <!-- Contenido SEO -->
-      <section class="prose" aria-labelledby="guia-titulo">
+      <section class="prosa" aria-labelledby="guia-titulo">
         <h2 id="guia-titulo">Cómo calcular tu tarifa freelance (sin regalarte)</h2>
         <p>El error más común al empezar a trabajar freelance es copiar la tarifa de otro o, peor, dividir tu último sueldo en relación de dependencia por 160 horas. Ninguna de las dos cosas refleja tu realidad. Una tarifa freelance bien calculada parte de tres números: cuánto necesitás ganar, cuántas horas podés facturar de verdad y qué costos tenés que cubrir vos que antes cubría un empleador.</p>
         <h3>1. Empezá por tu objetivo mensual</h3>
         <p>Sumá tus gastos de vida, el monotributo o tus impuestos, obra social o prepaga, aportes jubilatorios si los hacés por tu cuenta, herramientas y equipo, y un margen de ahorro. Ese total, en pesos o en dólares, es tu piso: si tu tarifa no lo cubre, estás trabajando a pérdida aunque tengas la agenda llena.</p>
         <h3>2. Contá tus horas facturables, no tus horas trabajadas</h3>
-        <p>Un freelancer no factura 40 horas por semana. Entre buscar clientes, armar presupuestos, responder mails, facturar y capacitarte, entre un 20% y un 30% de tu tiempo no se cobra. Si trabajás 35 horas semanales, tus horas facturables reales rondan las 25. La calculadora inversa de esta página ya hace esa cuenta por vos con el campo de porcentaje facturable.</p>
+        <p>Un freelancer no factura 40 horas por semana. Entre buscar clientes, armar presupuestos, responder mails, facturar y capacitarte, entre un 20% y un 30% de tu tiempo no se cobra. Si trabajás 35 horas semanales, tus horas facturables reales rondan las 25. La calculadora de esta página te pide directamente esas horas reales.</p>
         <h3>3. Elegí bien la cotización del dólar</h3>
         <p>Si cobrás en dólares desde el exterior, el tipo de cambio al que efectivamente convertís define tu ingreso real en pesos. No es lo mismo liquidar al dólar oficial por transferencia bancaria que vender dólar MEP o manejarte con el blue. La diferencia entre cotizaciones puede significar un porcentaje considerable de tu ingreso, así que hacé el cálculo con la cotización que realmente usás, no con la que sale en los títulos de los diarios.</p>
         <h3>4. Comparate con el mercado y ajustá</h3>
         <p>Con tu tarifa mínima calculada, mirá los rangos de referencia de tu rubro. Si tu número quedó por debajo del rango, tenés margen para subir. Si quedó por encima, no bajes de entrada: justificalo con especialización, velocidad o portfolio. Y revisá tu tarifa cada tres a seis meses: con inflación en pesos y un dólar que se mueve, una tarifa que no se actualiza es una tarifa que baja sola.</p>
       </section>
 
-      <div class="tiza-regla" aria-hidden="true"></div>
+      <div class="separador" aria-hidden="true"></div>
 
       <!-- FAQ -->
-      <section class="prose" aria-labelledby="faq-titulo">
+      <section class="prosa" aria-labelledby="faq-titulo">
         <h2 id="faq-titulo">Preguntas frecuentes</h2>
         <details>
           <summary>¿Cuánto cobra por hora un freelancer en Argentina?</summary>
@@ -270,7 +316,7 @@
         </details>
         <details>
           <summary>¿Cómo calculo mi tarifa si sé cuánto quiero ganar por mes?</summary>
-          <p>Dividí tu objetivo mensual por tus horas facturables del mes: horas semanales × 4,33 semanas × porcentaje facturable (típicamente 70-80%). La calculadora inversa de esta página lo hace automáticamente.</p>
+          <p>Dividí tu objetivo mensual por tus horas facturables del mes: horas semanales × 4,33 semanas × porcentaje facturable (típicamente 70-80%). La calculadora de esta página lo hace automáticamente.</p>
         </details>
         <details>
           <summary>¿Las tarifas de referencia son exactas?</summary>
@@ -282,13 +328,24 @@
         </details>
       </section>
 
+      <!--
+        ============ AdSense placeholder ============
+        Reemplazar este bloque por el snippet real de Google AdSense
+        una vez aprobado el sitio. Formato sugerido: responsive display.
+        <ins class="adsbygoogle" ...></ins>
+      -->
+      <div class="ad-slot" aria-hidden="true" style="display:none">
+        <span>Publicidad</span>
+      </div>
+      <!-- ============ /AdSense placeholder ============ -->
+
     </div>
   </main>
 
-  <footer class="site-footer">
+  <footer class="pie">
     <div class="container">
       <p>Cotizaciones provistas por <a href="https://dolarapi.com" rel="noopener" target="_blank">DolarApi.com</a>. Esta página es una herramienta orientativa y no constituye asesoramiento financiero, impositivo ni profesional.</p>
-      <p class="footer-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
+      <p class="pie-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
     </div>
   </footer>
 
