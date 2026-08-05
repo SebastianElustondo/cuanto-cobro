@@ -4,13 +4,17 @@
    serif expresiva (Fraunces) para lo importante, mono solo para cifras.
    Un único gesto manual por pantalla (el trazo bajo el hero). */
 
+/* verdes de la marca Quovra: --verde (profundo, #1E7A4C) para texto y
+   acentos; --verde-vivo (#47B37C, el del punto de "Quovra.") para los
+   detalles chicos que pueden brillar un poco */
 :root {
-  --fondo: #faf6ec;
+  --fondo: #faf7f0; /* el crema exacto de quovra.com */
   --panel: #ffffff;
   --tinta: #1c1813;
   --gris: #7c7466;
   --linea: #e3dccb;
-  --verde: #2e7d54;
+  --verde: #1e7a4c;
+  --verde-vivo: #47b37c;
   --verde-suave: #eaf3ec;
   --alerta: #9a7b1f;
   --font-serif: "Fraunces", Georgia, serif;
@@ -26,6 +30,7 @@
   --gris: #a29a8a;
   --linea: #373026;
   --verde: #7cc29a;
+  --verde-vivo: #58c88f;
   --verde-suave: #22301f;
   --alerta: #d4b25e;
 }
@@ -137,6 +142,11 @@ a {
   font-weight: 600;
   font-size: 1.25rem;
   letter-spacing: -0.01em;
+}
+
+/* el "?" verde: espejo del punto verde de "Quovra." */
+.marca-signo {
+  color: var(--verde-vivo);
 }
 
 .nav {
@@ -280,7 +290,7 @@ a {
   font-family: var(--font-mono);
   font-weight: 500;
   font-size: 0.8rem;
-  color: var(--gris);
+  color: var(--verde);
 }
 
 input[type="number"],
@@ -432,6 +442,28 @@ input::placeholder {
   color: var(--gris);
 }
 
+/* puntito "en vivo" de la marca, con latido muy suave */
+.franja-meta:not(:empty)::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--verde-vivo);
+  margin-right: 0.45rem;
+  vertical-align: 1px;
+  animation: vivo 3s ease-in-out infinite;
+}
+
+@keyframes vivo {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .franja-meta:not(:empty)::before { animation: none; }
+}
+
 .franja-info {
   margin-top: 0.6rem;
   font-size: 0.88rem;
@@ -467,6 +499,12 @@ input::placeholder {
   font-weight: 600;
   font-size: 1.45rem;
   letter-spacing: -0.01em;
+}
+
+/* guión editorial verde antes de cada título de sección */
+.prosa h2::before {
+  content: "— ";
+  color: var(--verde-vivo);
 }
 
 .prosa h3 {
