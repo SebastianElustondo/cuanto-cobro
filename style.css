@@ -1,21 +1,33 @@
-/* ¿Cuánto cobro? — "Casa de Cambio".
-   La pizarra de cambio de la city porteña: fondo verde pizarra profundo,
-   tiza blanca, el verde billete solo para la plata. Las cotizaciones viven
-   en un tablero split-flap que gira al cargar; las calculadoras son
-   ventanillas. Paleta: pizarra / tiza / billete / ámbar de etiqueta. */
+/* ¿Cuánto cobro? — "Editorial financiera".
+   Tus números, puestos en claro: hoja de presupuesto bien diseñada, no
+   terminal bursátil. Base crema, tinta oscura, verde como único acento,
+   serif expresiva (Fraunces) para lo importante, mono solo para cifras.
+   Un único gesto manual por pantalla (el trazo bajo el hero). */
 
 :root {
-  --pizarra: #0e1813;
-  --pizarra-panel: #121f18;
-  --pizarra-hueco: #0a120e;
-  --tiza: #eee9d9;
-  --tiza-dim: #9aa89b;
-  --billete: #53d68a;
-  --ambar: #e8c47c;
-  --linea-tiza: rgba(238, 233, 217, 0.16);
-  --font-letrero: "Oswald", "Arial Narrow", sans-serif;
-  --font-numeros: "IBM Plex Mono", "Courier New", monospace;
-  --font-texto: "IBM Plex Sans", "Helvetica Neue", sans-serif;
+  --fondo: #faf6ec;
+  --panel: #ffffff;
+  --tinta: #1c1813;
+  --gris: #7c7466;
+  --linea: #e3dccb;
+  --verde: #2e7d54;
+  --verde-suave: #eaf3ec;
+  --alerta: #9a7b1f;
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-sans: "Instrument Sans", -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+}
+
+/* modo oscuro: cálido y sin neón */
+:root[data-tema="oscuro"] {
+  --fondo: #171310;
+  --panel: #1f1a15;
+  --tinta: #ece6d8;
+  --gris: #a29a8a;
+  --linea: #373026;
+  --verde: #7cc29a;
+  --verde-suave: #22301f;
+  --alerta: #d4b25e;
 }
 
 * {
@@ -26,623 +38,552 @@
 
 html {
   -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-  font-family: var(--font-texto);
-  background:
-    radial-gradient(1100px 500px at 50% -100px, rgba(83, 214, 138, 0.05), transparent 60%),
-    var(--pizarra);
-  color: var(--tiza);
+  font-family: var(--font-sans);
+  background: var(--fondo);
+  color: var(--tinta);
   line-height: 1.6;
   font-size: 1.02rem;
-  overflow-x: clip;
 }
 
 .container {
-  max-width: 780px;
+  max-width: 720px;
   margin: 0 auto;
   padding: 0 1.25rem;
 }
 
 ::selection {
-  background: var(--billete);
-  color: var(--pizarra);
+  background: var(--verde);
+  color: var(--fondo);
 }
 
 a {
-  color: var(--billete);
+  color: var(--verde);
 }
 
-/* ---------- Marquesina: la tira "cambio cambio" ---------- */
-
-.marquesina {
-  overflow: hidden;
-  white-space: nowrap;
-  border-bottom: 1px solid var(--linea-tiza);
-  padding: 0.42rem 0;
-  font-family: var(--font-letrero);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: var(--tiza-dim);
+.oculto {
+  display: none !important;
 }
 
-.marquesina span {
-  display: inline-block;
-  animation: marquesina 40s linear infinite;
+/* ---------- Cabecera ---------- */
+
+.cabecera {
+  border-bottom: 1px solid var(--linea);
+  padding: 1rem 0;
 }
 
-@keyframes marquesina {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .marquesina span { animation: none; }
-}
-
-/* ---------- Letrero (hero) ---------- */
-
-.letrero {
-  padding: 3rem 0 1.4rem;
-  text-align: left;
-}
-
-.brand {
-  font-family: var(--font-numeros);
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.14em;
-  color: var(--billete);
-  margin-bottom: 1rem;
-}
-
-.brand::before {
-  content: "$ ";
-  opacity: 0.7;
-}
-
-.letrero h1 {
-  font-family: var(--font-letrero);
-  font-weight: 700;
-  font-size: clamp(2rem, 5.6vw, 3.15rem);
-  line-height: 1.08;
-  text-transform: uppercase;
-  letter-spacing: 0.015em;
-  max-width: 680px;
-}
-
-.subtitle {
-  margin-top: 1rem;
-  max-width: 52ch;
-  color: var(--tiza-dim);
-  font-size: 1.04rem;
-}
-
-.tiza-subrayado {
-  display: block;
-  width: min(300px, 60%);
-  height: 12px;
-  margin-top: 1.3rem;
-  color: var(--billete);
-}
-
-/* ---------- Tablero de cotizaciones ---------- */
-
-.tablero {
-  margin-top: 1.6rem;
-  background: var(--pizarra-panel);
-  border: 1px solid var(--linea-tiza);
-  border-radius: 12px;
-  padding: 1.3rem 1.4rem 1.5rem;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
-}
-
-.tablero-cabecera {
+.cabecera-fila {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
 }
 
-.tablero h2 {
-  font-family: var(--font-letrero);
-  font-weight: 600;
-  font-size: 1.05rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--ambar);
-}
-
-/* lucecita de "en vivo" */
-.luz-vivo {
-  width: 9px;
-  height: 9px;
-  border-radius: 50%;
-  background: var(--billete);
-  box-shadow: 0 0 10px var(--billete);
-  animation: latir 2.4s ease-in-out infinite;
-  flex: 0 0 auto;
-}
-
-@keyframes latir {
-  0%, 100% { opacity: 1; }
-  50%      { opacity: 0.35; }
-}
-
-.rates-status {
-  margin-top: 0.9rem;
-  color: var(--tiza-dim);
-  font-size: 0.95rem;
-}
-
-.rates-grid {
-  margin-top: 1.1rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.8rem;
-}
-
-.rate-card {
-  appearance: none;
-  border: 1px solid var(--linea-tiza);
-  border-radius: 10px;
-  background: var(--pizarra-hueco);
-  color: var(--tiza);
-  padding: 0.9rem 0.85rem 0.8rem;
-  text-align: left;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 0.55rem;
-  transition: border-color 0.15s ease, transform 0.15s ease;
-}
-
-.rate-card:hover {
-  border-color: rgba(83, 214, 138, 0.45);
-  transform: translateY(-1px);
-}
-
-.rate-card.selected {
-  border-color: var(--billete);
-  box-shadow: 0 0 0 1px var(--billete), 0 0 18px rgba(83, 214, 138, 0.12);
-}
-
-.rate-card.selected .rate-name::after {
-  content: "en uso";
-  font-family: var(--font-numeros);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  color: var(--pizarra);
-  background: var(--billete);
-  border-radius: 3px;
-  padding: 0.1rem 0.35rem;
-  margin-left: 0.5rem;
-  vertical-align: 2px;
-}
-
-.rate-name {
-  font-family: var(--font-letrero);
-  font-weight: 600;
-  font-size: 1.02rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.rate-tier {
-  display: block;
-  font-family: var(--font-texto);
+.marca {
+  font-family: var(--font-serif);
   font-style: italic;
-  font-weight: 400;
-  font-size: 0.74rem;
-  letter-spacing: 0.02em;
-  text-transform: none;
-  color: var(--tiza-dim);
-  margin-top: 0.15rem;
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
 }
 
-/* fila de celdas split-flap */
-.flap-row {
+.nav {
   display: flex;
   align-items: center;
-  gap: 3px;
-  font-family: var(--font-numeros);
-  font-weight: 700;
-  font-size: 1.5rem;
-  color: var(--tiza);
-  min-height: 2.2rem;
-}
-
-.flap {
-  display: inline-grid;
-  place-items: center;
-  min-width: 1.5ch;
-  padding: 0.12em 0.08em;
-  background: linear-gradient(to bottom, #1b2a21 48.5%, #0d1712 51.5%);
-  border: 1px solid rgba(0, 0, 0, 0.55);
-  border-radius: 4px;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 3px rgba(0, 0, 0, 0.4);
-  line-height: 1.15;
-}
-
-.flap.flap-sep {
-  min-width: auto;
-  background: none;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-  color: var(--tiza-dim);
-}
-
-.flap.flap-moneda {
-  background: none;
-  border: none;
-  box-shadow: none;
-  font-size: 0.72em;
-  color: var(--billete);
-  padding-right: 0.1em;
-}
-
-.rate-detail {
-  font-family: var(--font-numeros);
-  font-size: 0.72rem;
+  gap: 1.1rem;
+  font-size: 0.88rem;
   font-weight: 500;
-  letter-spacing: 0.04em;
-  color: var(--tiza-dim);
 }
 
-.rates-updated {
-  margin-top: 0.9rem;
-  font-family: var(--font-numeros);
-  font-size: 0.72rem;
-  color: var(--tiza-dim);
-  letter-spacing: 0.04em;
+.nav a {
+  color: var(--gris);
+  text-decoration: none;
 }
 
-.manual-rate {
-  margin-top: 1rem;
+.nav a:hover {
+  color: var(--verde);
 }
 
-.manual-rate label {
+#btn-tema {
+  appearance: none;
+  border: 1px solid var(--linea);
+  background: none;
+  color: var(--gris);
+  font-size: 0.95rem;
+  line-height: 1;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+#btn-tema:hover {
+  color: var(--verde);
+  border-color: var(--verde);
+}
+
+/* ---------- Hero compacto ---------- */
+
+.hero {
+  padding: 2.6rem 0 0.4rem;
+}
+
+.hero h1 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(2rem, 5.4vw, 3rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  max-width: 18ch;
+}
+
+.hero-bajada {
+  margin-top: 0.8rem;
+  color: var(--gris);
+  max-width: 56ch;
+  font-size: 1rem;
+}
+
+.trazo {
   display: block;
-  font-size: 0.92rem;
-  color: var(--tiza-dim);
-  margin-bottom: 0.45rem;
+  width: 180px;
+  height: 10px;
+  margin-top: 1.1rem;
+  color: var(--verde);
 }
 
-.hint {
-  margin-top: 0.9rem;
-  font-size: 0.9rem;
-  color: var(--tiza-dim);
+/* ---------- Calculadora ---------- */
+
+.calculadora {
+  margin-top: 1.6rem;
+  background: var(--panel);
+  border: 1px solid var(--linea);
+  border-radius: 14px;
+  box-shadow: 0 8px 30px rgba(28, 24, 19, 0.05);
+  overflow: hidden;
 }
 
-.hint strong {
-  color: var(--ambar);
+.tabs {
+  display: flex;
+  border-bottom: 1px solid var(--linea);
+}
+
+.tab {
+  appearance: none;
+  flex: 1;
+  border: none;
+  background: none;
+  font-family: var(--font-sans);
   font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--gris);
+  padding: 0.95rem 0.5rem;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s ease;
 }
 
-/* ---------- Ventanillas (calculadoras) ---------- */
-
-.ventanilla {
-  margin-top: 2.6rem;
-  border: 1.5px dashed var(--linea-tiza);
-  border-radius: 12px;
-  padding: 1.5rem 1.4rem 1.6rem;
-  position: relative;
+.tab:hover {
+  color: var(--tinta);
 }
 
-.ventanilla-num {
-  position: absolute;
-  top: -0.75rem;
-  left: 1.1rem;
-  background: var(--pizarra);
-  padding: 0 0.6rem;
-  font-family: var(--font-numeros);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--ambar);
+.tab.on {
+  color: var(--tinta);
+  border-bottom-color: var(--verde);
 }
 
-.ventanilla h2,
-main section > h2 {
-  font-family: var(--font-letrero);
-  font-weight: 600;
-  font-size: 1.35rem;
-  line-height: 1.25;
-  letter-spacing: 0.02em;
+.panel {
+  padding: 1.5rem 1.5rem 1.6rem;
 }
 
-.section-lead {
-  margin-top: 0.55rem;
-  color: var(--tiza-dim);
-  font-size: 0.97rem;
-  max-width: 58ch;
-}
-
-.calc-form {
-  margin-top: 1.3rem;
+.campos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 1.1rem 1.4rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.15rem 1.5rem;
 }
 
-.field label {
+.campo label {
   display: block;
-  font-family: var(--font-letrero);
-  font-weight: 500;
-  font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--tiza-dim);
+  font-weight: 600;
+  font-size: 0.88rem;
   margin-bottom: 0.4rem;
 }
 
-.label-note {
-  display: block;
-  font-family: var(--font-texto);
-  text-transform: none;
-  letter-spacing: 0.01em;
-  font-size: 0.78rem;
+.opcional {
   font-weight: 400;
-  margin-top: 0.15rem;
+  color: var(--gris);
+}
+
+.campo-grupo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.campo-corto input {
+  max-width: 110px;
+}
+
+.sufijo {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--gris);
 }
 
 input[type="number"],
 select {
   width: 100%;
-  font-family: var(--font-numeros);
-  font-weight: 600;
-  font-size: 1.25rem;
-  color: var(--tiza);
-  background: var(--pizarra-hueco);
-  border: 1px solid var(--linea-tiza);
-  border-bottom: 2px solid rgba(238, 233, 217, 0.35);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 1.05rem;
+  color: var(--tinta);
+  background: var(--fondo);
+  border: 1px solid var(--linea);
   border-radius: 8px;
   padding: 0.55rem 0.7rem;
   outline: none;
   transition: border-color 0.15s ease;
 }
 
+select {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+}
+
 input[type="number"]:focus,
 select:focus {
-  border-color: var(--billete);
+  border-color: var(--verde);
 }
 
 input::placeholder {
-  color: rgba(154, 168, 155, 0.55);
-  font-weight: 500;
+  color: var(--gris);
+  opacity: 0.6;
 }
 
-.input-group {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.input-group input {
-  flex: 1;
-  min-width: 0;
-}
-
-.input-group select {
-  flex: 0 0 auto;
-  width: auto;
-}
-
-/* resultado: lo que importa, en verde billete */
-.result {
-  margin-top: 1.3rem;
-  border-top: 1px solid var(--linea-tiza);
-  padding-top: 1.1rem;
-}
-
-.result-line {
-  font-size: 1.05rem;
-}
-
-.result-line strong {
-  font-family: var(--font-numeros);
-  font-weight: 700;
-  font-size: 1.65rem;
-  color: var(--billete);
-  letter-spacing: 0.01em;
-}
-
-.result-line-secondary {
+.campo-nota {
   margin-top: 0.35rem;
-}
-
-.result-line-secondary strong {
-  font-size: 1.15rem;
-}
-
-.result-note {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: var(--tiza-dim);
-}
-
-/* ---------- Reglas de tiza entre secciones ---------- */
-
-.tiza-regla {
-  margin: 2.8rem auto;
-  height: 1px;
-  background: repeating-linear-gradient(
-    to right,
-    var(--linea-tiza) 0 14px,
-    transparent 14px 24px
-  );
-}
-
-/* ---------- Tabla de referencia ---------- */
-
-.table-wrap {
-  margin-top: 1.2rem;
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.96rem;
-}
-
-thead th {
-  font-family: var(--font-letrero);
-  font-weight: 600;
   font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--ambar);
-  text-align: left;
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1.5px solid var(--linea-tiza);
+  color: var(--gris);
 }
 
-tbody th {
-  text-align: left;
-  font-weight: 600;
-  padding: 0.65rem 0.75rem;
-  color: var(--tiza);
+#grupo-manual {
+  margin-top: 0.5rem;
 }
 
-tbody td {
-  font-family: var(--font-numeros);
-  font-weight: 500;
-  padding: 0.65rem 0.75rem;
-  color: var(--tiza-dim);
+/* ---------- Resultado: el objeto más fuerte de la página ---------- */
+
+.resultado {
+  margin-top: 1.5rem;
+  background: var(--verde-suave);
+  border-radius: 10px;
+  padding: 1.2rem 1.4rem 1.3rem;
 }
 
-tbody tr {
-  border-bottom: 1px dashed var(--linea-tiza);
-}
-
-.disclaimer {
-  margin-top: 1.1rem;
+.resultado-etiqueta {
   font-size: 0.85rem;
-  color: var(--tiza-dim);
-  max-width: 65ch;
-}
-
-/* ---------- Prose (guía + FAQ) ---------- */
-
-.prose h3 {
-  font-family: var(--font-letrero);
   font-weight: 600;
-  font-size: 1.05rem;
-  letter-spacing: 0.03em;
-  margin-top: 1.6rem;
-  color: var(--ambar);
+  color: var(--verde);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
-.prose p {
-  margin-top: 0.7rem;
-  color: var(--tiza-dim);
+.resultado-cifra {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: clamp(1.9rem, 5.5vw, 2.7rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-top: 0.2rem;
+}
+
+.resultado-unidad {
+  font-size: 0.55em;
+  font-weight: 500;
+  color: var(--gris);
+}
+
+.resultado-detalle {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  color: var(--gris);
+}
+
+/* ---------- Acciones ---------- */
+
+.acciones {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0 1.5rem 1.4rem;
+}
+
+.acciones button {
+  appearance: none;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--tinta);
+  background: none;
+  border: 1px solid var(--linea);
+  border-radius: 999px;
+  padding: 0.42rem 0.95rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.acciones button:hover {
+  border-color: var(--verde);
+  color: var(--verde);
+}
+
+.aviso-copiado {
+  font-size: 0.82rem;
+  color: var(--verde);
+  font-weight: 500;
+}
+
+/* ---------- Franja de cotizaciones (secundaria) ---------- */
+
+.franja-cotizaciones {
+  margin-top: 1.6rem;
+  padding: 0.9rem 0 0.2rem;
+}
+
+.franja-valores {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.92rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.6rem;
+}
+
+.franja-valores .cot {
+  white-space: nowrap;
+}
+
+.franja-valores .cot b {
+  font-weight: 600;
+}
+
+.franja-valores .cot span {
+  color: var(--gris);
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  margin-right: 0.4rem;
+}
+
+.franja-meta {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--gris);
+}
+
+.franja-info {
+  margin-top: 0.6rem;
+  font-size: 0.88rem;
+}
+
+.franja-info summary {
+  cursor: pointer;
+  color: var(--gris);
+  font-weight: 500;
+  width: fit-content;
+}
+
+.franja-info summary:hover {
+  color: var(--verde);
+}
+
+.franja-info p {
+  margin-top: 0.5rem;
+  color: var(--gris);
   max-width: 68ch;
 }
 
-.prose details {
-  margin-top: 0.9rem;
-  border: 1px solid var(--linea-tiza);
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  background: var(--pizarra-panel);
+/* ---------- Separadores y prosa ---------- */
+
+.separador {
+  height: 1px;
+  background: var(--linea);
+  margin: 2.6rem 0;
 }
 
-.prose summary {
+.prosa h2 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 1.45rem;
+  letter-spacing: -0.01em;
+}
+
+.prosa h3 {
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+}
+
+.prosa p {
+  margin-top: 0.7rem;
+  color: var(--gris);
+  max-width: 66ch;
+}
+
+.prosa p strong {
+  color: var(--tinta);
+}
+
+.seccion-bajada {
+  margin-top: 0.6rem;
+}
+
+.referencia {
+  border-left: 3px solid var(--alerta);
+  padding-left: 0.9rem;
+}
+
+.nota-chica {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: var(--gris);
+  max-width: 66ch;
+}
+
+/* FAQ */
+.prosa details {
+  margin-top: 0.8rem;
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  background: var(--panel);
+}
+
+.prosa summary {
   cursor: pointer;
   font-weight: 600;
-  color: var(--tiza);
   list-style: none;
   position: relative;
   padding-right: 1.6rem;
 }
 
-.prose summary::-webkit-details-marker { display: none; }
+.prosa summary::-webkit-details-marker { display: none; }
 
-.prose summary::after {
+.prosa summary::after {
   content: "+";
   position: absolute;
   right: 0.1rem;
   top: 50%;
   transform: translateY(-52%);
-  font-family: var(--font-numeros);
-  font-weight: 600;
-  color: var(--billete);
+  font-family: var(--font-mono);
+  color: var(--verde);
 }
 
-.prose details[open] summary::after {
+.prosa details[open] summary::after {
   content: "–";
 }
 
-.prose details p {
-  margin-top: 0.6rem;
+/* ---------- Tabla ---------- */
+
+.table-wrap {
+  margin-top: 1.1rem;
+  overflow-x: auto;
+  border: 1px solid var(--linea);
+  border-radius: 10px;
+  background: var(--panel);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+thead th {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--gris);
+  text-align: left;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--linea);
+}
+
+tbody th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.6rem 0.9rem;
+}
+
+tbody td {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.88rem;
+  padding: 0.6rem 0.9rem;
+  color: var(--gris);
+}
+
+tbody tr + tr {
+  border-top: 1px solid var(--linea);
 }
 
 /* ---------- Ad slot ---------- */
 
 .ad-slot {
   margin: 2rem 0;
-  border: 1px dashed var(--linea-tiza);
-  border-radius: 8px;
+  border: 1px dashed var(--linea);
+  border-radius: 10px;
   padding: 1rem;
   text-align: center;
-  color: var(--tiza-dim);
+  color: var(--gris);
   font-size: 0.8rem;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
-/* ---------- Footer ---------- */
+/* ---------- Pie ---------- */
 
-.site-footer {
-  margin-top: 3.2rem;
-  border-top: 1px solid var(--linea-tiza);
-  padding: 1.6rem 0 2.2rem;
+.pie {
+  margin-top: 3rem;
+  border-top: 1px solid var(--linea);
+  padding: 1.5rem 0 2.2rem;
   font-size: 0.85rem;
-  color: var(--tiza-dim);
+  color: var(--gris);
 }
 
-.footer-quovra {
-  margin-top: 0.8rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.footer-quovra a {
-  text-transform: none;
-  letter-spacing: 0;
+.pie-quovra {
+  margin-top: 0.7rem;
+  font-size: 0.8rem;
 }
 
 .quovra-link {
-  font-family: Georgia, serif;
-  font-size: 1rem;
+  font-family: var(--font-serif);
   font-weight: 600;
+  font-size: 0.95rem;
   text-decoration: none;
-  color: var(--tiza);
+  color: var(--tinta);
 }
 
 .quovra-link span {
-  color: var(--billete);
+  color: var(--verde);
 }
 
 /* ---------- Responsive ---------- */
 
-@media (max-width: 640px) {
-  .rates-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 560px) {
+  .panel {
+    padding: 1.2rem 1.1rem 1.3rem;
   }
 
-  .flap-row {
-    font-size: 1.65rem;
+  .acciones {
+    padding: 0 1.1rem 1.2rem;
+    flex-wrap: wrap;
   }
 
-  .letrero {
-    padding-top: 2.2rem;
+  .nav {
+    gap: 0.8rem;
   }
 }
