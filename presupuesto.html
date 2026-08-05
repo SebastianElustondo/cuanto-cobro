@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presupuestador de proyectos freelance — ¿Cuánto cobro?</title>
+<meta name="description" content="Calculá el precio de un proyecto freelance: horas estimadas por tu tarifa, margen de imprevistos, gastos directos y adelanto sugerido, con desglose listo para el cliente.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cobro.quovra.com/presupuesto">
+<meta property="og:title" content="Presupuestador de proyectos freelance">
+<meta property="og:description" content="Calculá el precio de un proyecto freelance: horas estimadas por tu tarifa, margen de imprevistos, gastos directos y adelanto sugerido, con desglose listo para el cliente.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://cobro.quovra.com/presupuesto">
+<meta property="og:site_name" content="Cuánto Cobro">
+<meta property="og:image" content="https://cobro.quovra.com/og.png">
+<meta name="theme-color" content="#faf7f0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23faf6ec'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%232e7d54' text-anchor='middle'%3E$%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem("cc-tema");
+    if (t === "oscuro" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.documentElement.setAttribute("data-tema", "oscuro");
+    }
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="container cabecera-fila">
+    <p class="marca"><a href="/" style="text-decoration:none;color:inherit">¿cuánto cobro<span class="marca-signo">?</span></a></p>
+    <nav class="nav" aria-label="Secciones">
+      <a href="/guias/">Guías</a>
+      <a href="/#herramientas">Herramientas</a>
+      <button type="button" id="btn-tema" aria-label="Cambiar entre modo claro y oscuro">◐</button>
+    </nav>
+  </div>
+</header>
+<main>
+<div class="container">
+
+<p class="migas"><a href="/">Inicio</a> › Herramientas › Presupuestador</p>
+<section class="hero" style="padding-top:1.2rem">
+<h1>Presupuestador de proyectos</h1>
+<p class="hero-bajada">Horas estimadas, tu tarifa y un margen para imprevistos: el precio del proyecto con el desglose listo para mandar al cliente.</p>
+</section>
+
+<section class="calculadora" aria-label="Presupuestador">
+<div class="panel">
+  <div class="campos">
+    <div class="campo">
+      <label for="horas">Horas estimadas de trabajo</label>
+      <div class="campo-grupo campo-corto">
+        <input type="number" id="horas" inputmode="decimal" min="0" step="any" placeholder="40">
+        <span class="sufijo">hs</span>
+      </div>
+      <p class="campo-nota">Incluí reuniones, feedback y entrega, no solo el trabajo técnico.</p>
+    </div>
+    <div class="campo">
+      <label for="tarifa">Tu tarifa por hora</label>
+      <div class="campo-grupo">
+        <input type="number" id="tarifa" inputmode="decimal" min="0" step="any" placeholder="25">
+        <select id="moneda" aria-label="Moneda">
+          <option value="USD" selected>USD</option>
+          <option value="ARS">ARS</option>
+        </select>
+      </div>
+    </div>
+    <div class="campo">
+      <label for="margen">Margen de imprevistos</label>
+      <div class="campo-grupo campo-corto">
+        <input type="number" id="margen" inputmode="decimal" min="0" max="100" step="any" value="20">
+        <span class="sufijo">%</span>
+      </div>
+      <p class="campo-nota">15-25% según cuán definido esté el alcance.</p>
+    </div>
+    <div class="campo">
+      <label for="gastos">Gastos directos del proyecto <span class="opcional">(opcional)</span></label>
+      <div class="campo-grupo">
+        <input type="number" id="gastos" inputmode="decimal" min="0" step="any" placeholder="0">
+        <span class="sufijo" id="gastos-mon">USD</span>
+      </div>
+      <p class="campo-nota">Licencias, stock, plugins, viáticos: lo que pagás por este proyecto.</p>
+    </div>
+    <div class="campo">
+      <label for="adelanto">Adelanto a pedir</label>
+      <div class="campo-grupo campo-corto">
+        <input type="number" id="adelanto" inputmode="decimal" min="0" max="100" step="any" value="40">
+        <span class="sufijo">%</span>
+      </div>
+    </div>
+  </div>
+  <div class="resultado" id="res" hidden>
+    <p class="resultado-etiqueta">Precio del proyecto</p>
+    <p class="resultado-cifra"><span id="res-total">—</span></p>
+    <p class="resultado-detalle" id="res-detalle"></p>
+  </div>
+  <div class="acciones" id="acciones" hidden style="padding-left:0;padding-bottom:0;margin-top:0.8rem">
+    <button type="button" id="btn-copiar">Copiar desglose</button>
+    <button type="button" id="btn-pdf">Descargar PDF</button>
+    <span class="aviso-copiado" id="aviso" aria-live="polite"></span>
+  </div>
+</div>
+</section>
+
+<section class="prosa" style="margin-top:2rem">
+<p class="nota-chica">Consejos para que el presupuesto no se te dé vuelta: alcance por escrito, dos rondas de revisión incluidas y cronograma que corre desde que el cliente entrega lo suyo. Más en la <a href="/guias/presupuestar-un-proyecto">guía de presupuestos</a>.</p>
+</section>
+
+<script>
+(function () {
+  "use strict";
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat(String($(id).value).replace(",", ".")); return isFinite(v) && v >= 0 ? v : null; }
+  function fmt(v, m) {
+    return v.toLocaleString("es-AR", {style: "currency", currency: m, maximumFractionDigits: v < 100 ? 2 : 0});
+  }
+  var ultimo = "";
+
+  function calc() {
+    var horas = num("horas"), tarifa = num("tarifa");
+    var margen = num("margen") || 0, gastos = num("gastos") || 0, adelanto = num("adelanto") || 0;
+    var m = $("moneda").value;
+    $("gastos-mon").textContent = m;
+    var res = $("res");
+    if (!horas || !tarifa) { res.hidden = true; $("acciones").hidden = true; return; }
+    var base = horas * tarifa;
+    var imprevistos = base * margen / 100;
+    var total = base + imprevistos + gastos;
+    var anticipo = total * adelanto / 100;
+    $("res-total").textContent = fmt(total, m);
+    var d = horas + " hs × " + fmt(tarifa, m) + " = " + fmt(base, m);
+    if (margen > 0) d += " · imprevistos " + margen + "%: " + fmt(imprevistos, m);
+    if (gastos > 0) d += " · gastos: " + fmt(gastos, m);
+    if (adelanto > 0) d += ". Adelanto sugerido (" + adelanto + "%): " + fmt(anticipo, m) + " antes de empezar.";
+    $("res-detalle").textContent = d;
+    ultimo = "Presupuesto\n" +
+      "Trabajo estimado: " + horas + " hs x " + fmt(tarifa, m) + " = " + fmt(base, m) + "\n" +
+      (margen > 0 ? "Margen de imprevistos (" + margen + "%): " + fmt(imprevistos, m) + "\n" : "") +
+      (gastos > 0 ? "Gastos directos: " + fmt(gastos, m) + "\n" : "") +
+      "TOTAL: " + fmt(total, m) +
+      (adelanto > 0 ? "\nAdelanto para comenzar (" + adelanto + "%): " + fmt(anticipo, m) : "");
+    res.hidden = false;
+    $("acciones").hidden = false;
+  }
+
+  ["horas", "tarifa", "margen", "gastos", "adelanto"].forEach(function (id) {
+    $(id).addEventListener("input", calc);
+  });
+  $("moneda").addEventListener("change", calc);
+  $("btn-pdf").addEventListener("click", function () {
+    var horas = num("horas"), tarifa = num("tarifa");
+    if (!horas || !tarifa) return;
+    var margen = num("margen") || 0, gastos = num("gastos") || 0, adelanto = num("adelanto") || 0;
+    var m = $("moneda").value;
+    var base = horas * tarifa;
+    var imprevistos = base * margen / 100;
+    var total = base + imprevistos + gastos;
+    var hoy = new Date().toLocaleDateString("es-AR");
+    var filas = "<tr><td>Trabajo estimado (" + horas + " hs \u00d7 " + fmt(tarifa, m) + ")</td><td>" + fmt(base, m) + "</td></tr>";
+    if (margen > 0) filas += "<tr><td>Margen de imprevistos (" + margen + "%)</td><td>" + fmt(imprevistos, m) + "</td></tr>";
+    if (gastos > 0) filas += "<tr><td>Gastos directos</td><td>" + fmt(gastos, m) + "</td></tr>";
+    filas += "<tr class=hp-total><td>TOTAL</td><td>" + fmt(total, m) + "</td></tr>";
+    if (adelanto > 0) filas += "<tr><td>Adelanto para comenzar (" + adelanto + "%)</td><td>" + fmt(total * adelanto / 100, m) + "</td></tr>";
+    document.getElementById("hoja-presupuesto").innerHTML =
+      "<h1>Presupuesto</h1><p class=hp-meta>Fecha: " + hoy + " \u00b7 Validez sugerida: 30 d\u00edas</p>" +
+      "<table>" + filas + "</table>" +
+      "<p class=hp-pie>Presupuesto orientativo generado con cobro.quovra.com \u00b7 No incluye impuestos salvo indicaci\u00f3n.</p>";
+    window.print();
+  });
+
+  $("btn-copiar").addEventListener("click", function () {
+    if (!ultimo || !navigator.clipboard) return;
+    navigator.clipboard.writeText(ultimo).then(function () {
+      $("aviso").textContent = "Desglose copiado";
+      setTimeout(function () { $("aviso").textContent = ""; }, 1800);
+    }).catch(function () {});
+  });
+})();
+</script>
+
+</div>
+</main>
+<div id="hoja-presupuesto" aria-hidden="true"></div>
+<footer class="pie">
+  <div class="container">
+    <p>Esta página es una herramienta orientativa y no constituye asesoramiento financiero, impositivo ni profesional.</p>
+    <p class="pie-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/sobre">Sobre este sitio</a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
+  </div>
+</footer>
+<script>
+(function () {
+  var b = document.getElementById("btn-tema");
+  if (!b) return;
+  b.addEventListener("click", function () {
+    var r = document.documentElement;
+    var o = r.getAttribute("data-tema") === "oscuro";
+    if (o) r.removeAttribute("data-tema"); else r.setAttribute("data-tema", "oscuro");
+    try { localStorage.setItem("cc-tema", o ? "claro" : "oscuro"); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>

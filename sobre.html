@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sobre este sitio — ¿Cuánto cobro?</title>
+<meta name="description" content="Qué es ¿Cuánto cobro?, quién está detrás (Quovra), de dónde salen los datos y cómo contactarnos.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cobro.quovra.com/sobre">
+<meta property="og:title" content="Sobre este sitio">
+<meta property="og:description" content="Qué es ¿Cuánto cobro?, quién está detrás (Quovra), de dónde salen los datos y cómo contactarnos.">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://cobro.quovra.com/sobre">
+<meta property="og:site_name" content="Cuánto Cobro">
+<meta property="og:image" content="https://cobro.quovra.com/og.png">
+<meta name="theme-color" content="#faf7f0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23faf6ec'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%232e7d54' text-anchor='middle'%3E$%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem("cc-tema");
+    if (t === "oscuro" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.documentElement.setAttribute("data-tema", "oscuro");
+    }
+  } catch (e) {}
+})();
+</script>
+
+</head>
+<body>
+<header class="cabecera">
+  <div class="container cabecera-fila">
+    <p class="marca"><a href="/" style="text-decoration:none;color:inherit">¿cuánto cobro<span class="marca-signo">?</span></a></p>
+    <nav class="nav" aria-label="Secciones">
+      <a href="/guias/">Guías</a>
+      <a href="/#herramientas">Herramientas</a>
+      <button type="button" id="btn-tema" aria-label="Cambiar entre modo claro y oscuro">◐</button>
+    </nav>
+  </div>
+</header>
+<main>
+<div class="container">
+
+<p class="migas"><a href="/">Inicio</a> › Sobre este sitio</p>
+<article class="prosa articulo">
+<h1>Sobre este sitio</h1>
+<p class="art-meta">Última actualización: agosto 2026</p>
+
+<h2>Qué es ¿Cuánto cobro?</h2>
+<p>Una caja de herramientas gratuita para freelancers argentinos: calculadoras de tarifas, monotributo y presupuestos, cotizaciones del dólar en vivo y guías prácticas sobre plata e impuestos. Sin cuentas, sin registros: los números que cargás se procesan en tu navegador y no se guardan en ningún servidor.</p>
+
+<h2>Quién está detrás</h2>
+<p>Este sitio es un producto de <a href="https://quovra.com" target="_blank" rel="noopener">Quovra</a>, un estudio independiente de productos digitales de Buenos Aires fundado por Sebastián Elustondo. Lo construimos porque calcular cuánto cobrar —con inflación, tres dólares y monotributo— es un problema real que ningún conversor genérico resuelve bien.</p>
+
+<h2>De dónde salen los datos</h2>
+<ul>
+<li><strong>Cotizaciones:</strong> llegan en vivo desde <a href="https://dolarapi.com" target="_blank" rel="noopener">DolarApi.com</a> al cargar la página. Usamos el precio vendedor.</li>
+<li><strong>Escalas del monotributo:</strong> tabla oficial de ARCA, con la fecha de vigencia siempre visible. Se actualizan cada febrero y agosto.</li>
+<li><strong>Rangos de tarifas:</strong> valores orientativos del mercado freelance, no un relevamiento formal.</li>
+</ul>
+
+<h2>Qué no somos</h2>
+<p>No somos contadores ni asesores financieros. Todo lo que hay acá es orientativo: sirve para hacer números y tomar mejores decisiones, no reemplaza asesoramiento profesional para tu caso.</p>
+
+<h2>Contacto</h2>
+<p>Sugerencias, errores o consultas: <a href="mailto:contact@quovra.com">contact@quovra.com</a>. Los errores en datos (una escala vieja, una cotización rara) nos interesan especialmente: este sitio vive de ser confiable.</p>
+</article>
+
+</div>
+</main>
+<footer class="pie">
+  <div class="container">
+    <p>Esta página es una herramienta orientativa y no constituye asesoramiento financiero, impositivo ni profesional.</p>
+    <p class="pie-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/sobre">Sobre este sitio</a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
+  </div>
+</footer>
+<script>
+(function () {
+  var b = document.getElementById("btn-tema");
+  if (!b) return;
+  b.addEventListener("click", function () {
+    var r = document.documentElement;
+    var o = r.getAttribute("data-tema") === "oscuro";
+    if (o) r.removeAttribute("data-tema"); else r.setAttribute("data-tema", "oscuro");
+    try { localStorage.setItem("cc-tema", o ? "claro" : "oscuro"); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>

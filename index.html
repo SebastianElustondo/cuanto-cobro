@@ -97,8 +97,9 @@
     <div class="container cabecera-fila">
       <p class="marca">¿cuánto cobro<span class="marca-signo">?</span></p>
       <nav class="nav" aria-label="Secciones">
+        <a href="/guias/">Guías</a>
+        <a href="#herramientas">Herramientas</a>
         <a href="#como-funciona">Cómo funciona</a>
-        <a href="#cotizaciones">Cotizaciones</a>
         <button type="button" id="btn-tema" aria-label="Cambiar entre modo claro y oscuro">◐</button>
       </nav>
     </div>
@@ -138,6 +139,7 @@
                 <option value="blue" selected>Dólar blue (vendedor)</option>
                 <option value="bolsa">Dólar MEP (vendedor)</option>
                 <option value="oficial">Dólar oficial (vendedor)</option>
+                <option value="cripto">Dólar cripto (vendedor)</option>
                 <option value="personalizado">Personalizado…</option>
               </select>
               <div class="campo-grupo oculto" id="grupo-manual">
@@ -151,7 +153,14 @@
                 <input type="number" id="comision" inputmode="decimal" min="0" max="99" step="any" placeholder="0">
                 <span class="sufijo">%</span>
               </div>
-              <p class="campo-nota">Lo que se pierde entre plataforma, transferencia o retenciones.</p>
+              <!-- presets orientativos: cada plataforma cambia sus tarifas seguido -->
+              <div class="chips" aria-label="Comisiones típicas por plataforma">
+                <button type="button" class="chip" data-com="5.4">PayPal ~5,4%</button>
+                <button type="button" class="chip" data-com="3">Payoneer ~3%</button>
+                <button type="button" class="chip" data-com="1.5">Wise ~1,5%</button>
+                <button type="button" class="chip" data-com="0">Sin comisión</button>
+              </div>
+              <p class="campo-nota">Valores típicos, orientativos: verificá el de tu plataforma. Más info en la <a href="/guias/cobrar-del-exterior">guía de cobros del exterior</a>.</p>
             </div>
           </div>
 
@@ -206,12 +215,32 @@
               </div>
               <p class="campo-nota">Colchón para meses flojos, imprevistos o clientes que pagan tarde.</p>
             </div>
+            <div class="campo">
+              <label for="rubro">Tu rubro y seniority <span class="opcional">(opcional)</span></label>
+              <select id="rubro">
+                <option value="" selected>No comparar con el mercado</option>
+                <option value="10-20">Desarrollo — junior</option>
+                <option value="20-40">Desarrollo — semi senior</option>
+                <option value="40-60">Desarrollo — senior</option>
+                <option value="8-15">Diseño — junior</option>
+                <option value="15-28">Diseño — semi senior</option>
+                <option value="28-40">Diseño — senior</option>
+                <option value="5-12">Redacción — junior</option>
+                <option value="12-20">Redacción — semi senior</option>
+                <option value="20-30">Redacción — senior</option>
+                <option value="8-15m">Marketing — junior</option>
+                <option value="15-30">Marketing — semi senior</option>
+                <option value="30-45">Marketing — senior</option>
+              </select>
+              <p class="campo-nota">Comparamos tu resultado con los rangos de referencia (USD, clientes del exterior).</p>
+            </div>
           </div>
 
           <div class="resultado" id="resultado-hora" hidden>
             <p class="resultado-etiqueta">Tu tarifa sugerida</p>
             <p class="resultado-cifra"><span id="inv-resultado">—</span><span class="resultado-unidad"> por hora</span></p>
             <p class="resultado-detalle" id="inv-detalle"></p>
+            <p class="veredicto" id="inv-veredicto" hidden></p>
           </div>
         </div>
 
@@ -241,6 +270,31 @@
         <p><strong>Convertir una tarifa:</strong> multiplicamos tu monto en dólares por el tipo de cambio elegido y, si cargaste una comisión, la descontamos. Nada más: monto × cotización − comisión.</p>
         <p><strong>Tu valor por hora:</strong> sumamos tu ingreso deseado y tus gastos del trabajo, le agregamos el margen de seguridad y lo dividimos por tus horas facturables reales del mes. Las horas del mes salen de tus horas semanales, descontando las semanas de vacaciones que indicaste (año de 52 semanas, vacaciones en días hábiles).</p>
         <p class="referencia"><strong>Esto es una referencia.</strong> No reemplaza asesoramiento contable ni impositivo, y las cotizaciones cambian todos los días. Usá el resultado como punto de partida para tu propia decisión.</p>
+      </section>
+
+      <div class="separador" aria-hidden="true"></div>
+
+      <!-- Más herramientas -->
+      <section id="herramientas" class="prosa" aria-labelledby="herramientas-titulo">
+        <h2 id="herramientas-titulo">Más herramientas</h2>
+        <div class="cards">
+          <a class="card" href="/monotributo"><span class="card-tag">Impuestos</span><h3>Calculadora de monotributo</h3><p>Tu categoría, cuánto pagás por mes y qué parte de tus ingresos se va en la cuota.</p></a>
+          <a class="card" href="/presupuesto"><span class="card-tag">Proyectos</span><h3>Presupuestador de proyectos</h3><p>Horas, tarifa y margen de imprevistos: el precio con desglose listo para el cliente.</p></a>
+          <a class="card" href="/empleado-vs-freelance"><span class="card-tag">Comparador</span><h3>Empleado vs freelance</h3><p>Cuánto tenés que facturar para igualar tu sueldo, monotributo incluido.</p></a>
+        </div>
+      </section>
+
+      <div class="separador" aria-hidden="true"></div>
+
+      <!-- Guías destacadas -->
+      <section class="prosa" aria-labelledby="guias-titulo">
+        <h2 id="guias-titulo">Guías</h2>
+        <div class="cards">
+          <a class="card" href="/guias/monotributo-freelancers"><span class="card-tag">Impuestos</span><h3>Monotributo: categorías y cuánto pagás</h3><p>La tabla vigente y la recategorización de febrero y agosto.</p></a>
+          <a class="card" href="/guias/cobrar-del-exterior"><span class="card-tag">Cobros</span><h3>Cómo cobrar del exterior</h3><p>PayPal, Payoneer, Wise, banco y cripto: lo que se pierde en cada vía.</p></a>
+          <a class="card" href="/guias/dolar-mep-paso-a-paso"><span class="card-tag">Dólar</span><h3>Dólar MEP paso a paso</h3><p>La forma legal de cambiar a precio de mercado, para operar hoy.</p></a>
+        </div>
+        <p style="margin-top:1rem"><a href="/guias/">Ver todas las guías →</a></p>
       </section>
 
       <div class="separador" aria-hidden="true"></div>
@@ -350,7 +404,7 @@
   <footer class="pie">
     <div class="container">
       <p>Cotizaciones provistas por <a href="https://dolarapi.com" rel="noopener" target="_blank">DolarApi.com</a>. Esta página es una herramienta orientativa y no constituye asesoramiento financiero, impositivo ni profesional.</p>
-      <p class="pie-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
+      <p class="pie-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/sobre">Sobre este sitio</a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
     </div>
   </footer>
 

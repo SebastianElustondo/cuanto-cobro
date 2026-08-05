@@ -9,12 +9,13 @@
   "use strict";
 
   var API_URL = "https://dolarapi.com/v1/dolares";
-  var CASAS = ["blue", "bolsa", "oficial"];
-  var ETIQUETAS = { blue: "Blue", bolsa: "MEP", oficial: "Oficial" };
+  var CASAS = ["blue", "bolsa", "oficial", "cripto"];
+  var ETIQUETAS = { blue: "Blue", bolsa: "MEP", oficial: "Oficial", cripto: "Cripto" };
   var NOMBRES = {
     blue: "dólar blue vendedor",
     bolsa: "dólar MEP vendedor",
-    oficial: "dólar oficial vendedor"
+    oficial: "dólar oficial vendedor",
+    cripto: "dólar cripto vendedor"
   };
   var WEEKS_PER_YEAR = 52;
 
@@ -135,7 +136,7 @@
 
   function renderTicker(extras) {
     var items = [];
-    var nombresTicker = { blue: "Dólar blue", bolsa: "Dólar MEP", oficial: "Dólar oficial" };
+    var nombresTicker = { blue: "Dólar blue", bolsa: "Dólar MEP", oficial: "Dólar oficial", cripto: "Dólar cripto" };
     CASAS.forEach(function (casa) {
       var r = state.rates[casa];
       if (r) items.push({ nombre: nombresTicker[casa], venta: r.venta });
@@ -309,6 +310,30 @@
       }
     }
     $("inv-detalle").textContent = detalle;
+
+    // comparación con el rango del rubro (siempre en USD por hora)
+    var ver = $("inv-veredicto");
+    var rubro = $("rubro").value;
+    var tarifaUSD = moneda === "USD" ? tarifa : (rate ? tarifa / rate : null);
+    if (rubro && tarifaUSD) {
+      var partes = rubro.replace(/[^0-9-]/g, "").split("-");
+      var lo = parseFloat(partes[0]), hi = parseFloat(partes[1]);
+      var rango = "US$ " + lo + "–" + hi;
+      if (tarifaUSD < lo) {
+        ver.textContent = "▲ Por debajo del rango de tu rubro (" + rango + " por hora): tenés margen para apuntar más alto.";
+        ver.className = "veredicto bajo";
+      } else if (tarifaUSD > hi) {
+        ver.textContent = "◆ Por encima del rango típico (" + rango + " por hora): sostenelo con especialización y portfolio.";
+        ver.className = "veredicto ok";
+      } else {
+        ver.textContent = "✓ Dentro del rango de tu rubro (" + rango + " por hora).";
+        ver.className = "veredicto ok";
+      }
+      ver.hidden = false;
+    } else {
+      ver.hidden = true;
+    }
+
     out.hidden = false;
     actualizarAcciones();
   }
@@ -361,6 +386,7 @@
       p.set("vac", $("vacaciones").value || "0");
       if ($("gastos").value) p.set("gastos", $("gastos").value);
       p.set("margen", $("margen").value || "0");
+      if ($("rubro").value) p.set("rubro", $("rubro").value);
     }
     return location.origin + location.pathname + "?" + p.toString();
   }
@@ -383,6 +409,7 @@
     if (p.has("vac")) $("vacaciones").value = p.get("vac");
     if (p.has("gastos")) $("gastos").value = p.get("gastos");
     if (p.has("margen")) $("margen").value = p.get("margen");
+    if (p.has("rubro")) $("rubro").value = p.get("rubro");
   }
 
   // ---------- Tema claro/oscuro ----------
@@ -428,6 +455,23 @@
     $("objetivo-moneda").addEventListener("change", function () {
       sincronizarMonedaGastos();
       recalcInversa();
+    });
+    $("rubro").addEventListener("change", recalcInversa);
+
+    // chips de comisión típica por plataforma
+    Array.prototype.forEach.call(document.querySelectorAll(".chip[data-com]"), function (chip) {
+      chip.addEventListener("click", function () {
+        $("comision").value = chip.getAttribute("data-com");
+        Array.prototype.forEach.call(document.querySelectorAll(".chip[data-com]"), function (c) {
+          c.classList.toggle("on", c === chip);
+        });
+        recalcConversor();
+      });
+    });
+    $("comision").addEventListener("input", function () {
+      Array.prototype.forEach.call(document.querySelectorAll(".chip[data-com]"), function (c) {
+        c.classList.remove("on");
+      });
     });
 
     $("btn-copiar").addEventListener("click", function () {
