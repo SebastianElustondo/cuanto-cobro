@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculadora de monotributo 2026: categoría y cuánto pagás — ¿Cuánto cobro?</title>
+<meta name="description" content="Ingresá tu facturación mensual o anual y descubrí tu categoría de monotributo, la cuota que pagás y qué porcentaje de tus ingresos representa. Valores ARCA vigentes desde agosto 2026.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cobro.quovra.com/monotributo">
+<meta property="og:title" content="Calculadora de monotributo 2026: categoría y cuánto pagás">
+<meta property="og:description" content="Ingresá tu facturación mensual o anual y descubrí tu categoría de monotributo, la cuota que pagás y qué porcentaje de tus ingresos representa. Valores ARCA vigentes desde agosto 2026.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://cobro.quovra.com/monotributo">
+<meta property="og:site_name" content="Cuánto Cobro">
+<meta property="og:image" content="https://cobro.quovra.com/og.png">
+<meta name="theme-color" content="#faf7f0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23faf6ec'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%232e7d54' text-anchor='middle'%3E$%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem("cc-tema");
+    if (t === "oscuro" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.documentElement.setAttribute("data-tema", "oscuro");
+    }
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="container cabecera-fila">
+    <p class="marca"><a href="/" style="text-decoration:none;color:inherit">¿cuánto cobro<span class="marca-signo">?</span></a></p>
+    <nav class="nav" aria-label="Secciones">
+      <a href="/guias/">Guías</a>
+      <a href="/#herramientas">Herramientas</a>
+      <button type="button" id="btn-tema" aria-label="Cambiar entre modo claro y oscuro">◐</button>
+    </nav>
+  </div>
+</header>
+<main>
+<div class="container">
+
+<p class="migas"><a href="/">Inicio</a> › Herramientas › Monotributo</p>
+<section class="hero" style="padding-top:1.2rem">
+<h1>Calculadora de monotributo</h1>
+<p class="hero-bajada">Ingresá tu facturación y te decimos tu categoría, cuánto pagás por mes y qué parte de tus ingresos se va en la cuota. Valores oficiales de ARCA vigentes desde el 1/8/2026.</p>
+</section>
+
+<section class="calculadora" aria-label="Calculadora de monotributo">
+<div class="panel">
+  <div class="campos">
+    <div class="campo">
+      <label for="fact">Tu facturación</label>
+      <div class="campo-grupo">
+        <input type="number" id="fact" inputmode="decimal" min="0" step="any" placeholder="2.500.000">
+        <select id="fact-periodo" aria-label="Período de la facturación">
+          <option value="mensual" selected>por mes</option>
+          <option value="anual">por año</option>
+        </select>
+      </div>
+      <p class="campo-nota">En pesos. Si cobrás en dólares, convertí con la <a href="/">calculadora principal</a>.</p>
+    </div>
+    <div class="campo">
+      <label for="actividad">Tu actividad</label>
+      <select id="actividad">
+        <option value="serv" selected>Servicios (freelance típico)</option>
+        <option value="com">Venta de productos</option>
+      </select>
+    </div>
+  </div>
+  <div class="resultado" id="res" hidden>
+    <p class="resultado-etiqueta">Tu categoría</p>
+    <p class="resultado-cifra"><span id="res-cat">—</span></p>
+    <p class="resultado-detalle" id="res-detalle"></p>
+  </div>
+  <div class="resultado" id="res-fuera" hidden style="background:none;border:1px solid var(--linea)">
+    <p class="resultado-detalle" id="res-fuera-texto"></p>
+  </div>
+</div>
+</section>
+
+<section class="prosa" style="margin-top:2rem">
+<details>
+<summary>Ver la tabla completa (vigente desde el 1/8/2026)</summary>
+<div class="table-wrap" style="margin-top:0.8rem"><table>
+<thead><tr><th>Cat.</th><th>Tope anual</th><th>Cuota servicios</th><th>Cuota comercio</th></tr></thead>
+<tbody id="tabla-mono"></tbody>
+</table></div>
+</details>
+<p class="nota-chica" style="margin-top:1rem"><strong>Aviso:</strong> valores oficiales de ARCA de aplicación desde el 1/08/2026. Las escalas se actualizan cada febrero y agosto; la categoría también puede depender de superficie, energía y alquileres. Esta calculadora es orientativa y no reemplaza asesoramiento impositivo. Más contexto en la <a href="/guias/monotributo-freelancers">guía de monotributo</a>.</p>
+</section>
+
+<script>
+(function () {
+  "use strict";
+  // [categoría, tope anual, cuota servicios, cuota comercio] — ARCA 1/8/2026
+  var TABLA = [
+    ["A", 12009410.45, 49527.18, 49527.18],
+    ["B", 17595182.74, 56379.08, 56379.08],
+    ["C", 24670494.31, 66020.12, 64530.58],
+    ["D", 30628651.43, 84612.93, 82564.81],
+    ["E", 36028231.33, 119811.45, 108267.51],
+    ["F", 45151659.41, 150784.21, 129930.65],
+    ["G", 53995798.87, 230312.94, 158815.05],
+    ["H", 81924660.37, 522706.68, 317895.01],
+    ["I", 91699761.90, 963747.86, 474992.78],
+    ["J", 105012519.20, 1167299.76, 580793.69],
+    ["K", 126610838.75, 1614446.04, 702103.24]
+  ];
+  function $(id) { return document.getElementById(id); }
+  function ars(v) { return v.toLocaleString("es-AR", {style: "currency", currency: "ARS", maximumFractionDigits: 0}); }
+
+  // tabla visible
+  var filas = "";
+  for (var i = 0; i < TABLA.length; i++) {
+    var f = TABLA[i];
+    filas += "<tr><th scope=row>" + f[0] + "</th><td>" + ars(f[1]) + "</td><td>" + ars(f[2]) + "</td><td>" + ars(f[3]) + "</td></tr>";
+  }
+  $("tabla-mono").innerHTML = filas;
+
+  function calc() {
+    var v = parseFloat(String($("fact").value).replace(",", "."));
+    var res = $("res"), fuera = $("res-fuera");
+    if (!isFinite(v) || v <= 0) { res.hidden = true; fuera.hidden = true; return; }
+    var anual = $("fact-periodo").value === "mensual" ? v * 12 : v;
+    var mensual = anual / 12;
+    var esServ = $("actividad").value === "serv";
+    var cat = null;
+    for (var i = 0; i < TABLA.length; i++) {
+      if (anual <= TABLA[i][1]) { cat = TABLA[i]; break; }
+    }
+    if (!cat) {
+      res.hidden = true;
+      $("res-fuera-texto").innerHTML = "Con " + ars(anual) + " anuales superás el tope de la categoría K (" + ars(TABLA[10][1]) + "): quedás fuera del monotributo y corresponde el régimen general (autónomos + IVA + ganancias). Ahí sí o sí conviene un contador.";
+      fuera.hidden = false;
+      return;
+    }
+    fuera.hidden = true;
+    var cuota = esServ ? cat[2] : cat[3];
+    var pct = (cuota / mensual) * 100;
+    $("res-cat").textContent = cat[0];
+    $("res-detalle").innerHTML = "Cuota mensual: <strong>" + ars(cuota) + "</strong> (impuesto + jubilación + obra social). Sobre una facturación de " + ars(mensual) + " por mes, la cuota representa el <strong>" + pct.toFixed(1) + "%</strong> de tus ingresos: te quedan " + ars(mensual - cuota) + " antes de tus gastos.";
+    res.hidden = false;
+  }
+
+  ["fact"].forEach(function (id) { $(id).addEventListener("input", calc); });
+  $("fact-periodo").addEventListener("change", calc);
+  $("actividad").addEventListener("change", calc);
+})();
+</script>
+
+</div>
+</main>
+<footer class="pie">
+  <div class="container">
+    <p>Esta página es una herramienta orientativa y no constituye asesoramiento financiero, impositivo ni profesional.</p>
+    <p class="pie-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/sobre">Sobre este sitio</a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
+  </div>
+</footer>
+<script>
+(function () {
+  var b = document.getElementById("btn-tema");
+  if (!b) return;
+  b.addEventListener("click", function () {
+    var r = document.documentElement;
+    var o = r.getAttribute("data-tema") === "oscuro";
+    if (o) r.removeAttribute("data-tema"); else r.setAttribute("data-tema", "oscuro");
+    try { localStorage.setItem("cc-tema", o ? "claro" : "oscuro"); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>

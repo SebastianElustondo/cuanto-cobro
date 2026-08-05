@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empleado vs freelance: cuánto facturar para igualar tu sueldo — ¿Cuánto cobro?</title>
+<meta name="description" content="Convertí tu sueldo en relación de dependencia a su equivalente freelance: aguinaldo, prepaga, colchón para meses flojos y monotributo incluidos.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cobro.quovra.com/empleado-vs-freelance">
+<meta property="og:title" content="Empleado vs freelance: cuánto facturar para igualar tu sueldo">
+<meta property="og:description" content="Convertí tu sueldo en relación de dependencia a su equivalente freelance: aguinaldo, prepaga, colchón para meses flojos y monotributo incluidos.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_AR">
+<meta property="og:url" content="https://cobro.quovra.com/empleado-vs-freelance">
+<meta property="og:site_name" content="Cuánto Cobro">
+<meta property="og:image" content="https://cobro.quovra.com/og.png">
+<meta name="theme-color" content="#faf7f0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23faf6ec'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%232e7d54' text-anchor='middle'%3E$%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<script>
+(function () {
+  try {
+    var t = localStorage.getItem("cc-tema");
+    if (t === "oscuro" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.documentElement.setAttribute("data-tema", "oscuro");
+    }
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="container cabecera-fila">
+    <p class="marca"><a href="/" style="text-decoration:none;color:inherit">¿cuánto cobro<span class="marca-signo">?</span></a></p>
+    <nav class="nav" aria-label="Secciones">
+      <a href="/guias/">Guías</a>
+      <a href="/#herramientas">Herramientas</a>
+      <button type="button" id="btn-tema" aria-label="Cambiar entre modo claro y oscuro">◐</button>
+    </nav>
+  </div>
+</header>
+<main>
+<div class="container">
+
+<p class="migas"><a href="/">Inicio</a> › Herramientas › Empleado vs freelance</p>
+<section class="hero" style="padding-top:1.2rem">
+<h1>¿Cuánto tengo que facturar para igualar mi sueldo?</h1>
+<p class="hero-bajada">Un sueldo en relación de dependencia trae aguinaldo, vacaciones pagas y obra social. Esta calculadora te dice cuánto necesitás facturar como freelancer para quedar igual — monotributo incluido.</p>
+</section>
+
+<section class="calculadora" aria-label="Comparador empleado vs freelance">
+<div class="panel">
+  <div class="campos">
+    <div class="campo">
+      <label for="sueldo">Sueldo neto mensual (de bolsillo)</label>
+      <div class="campo-grupo">
+        <input type="number" id="sueldo" inputmode="decimal" min="0" step="any" placeholder="1.500.000">
+        <span class="sufijo">ARS</span>
+      </div>
+    </div>
+    <div class="campo">
+      <label for="prepaga">Prepaga / obra social <span class="opcional">(opcional)</span></label>
+      <div class="campo-grupo">
+        <input type="number" id="prepaga" inputmode="decimal" min="0" step="any" placeholder="0">
+        <span class="sufijo">ARS/mes</span>
+      </div>
+      <p class="campo-nota">Lo que pagarías de tu bolsillo por una cobertura similar a la del empleo. El monotributo incluye obra social básica.</p>
+    </div>
+    <div class="campo">
+      <label for="colchon">Colchón para meses flojos</label>
+      <div class="campo-grupo campo-corto">
+        <input type="number" id="colchon" inputmode="decimal" min="0" max="100" step="any" value="15">
+        <span class="sufijo">%</span>
+      </div>
+      <p class="campo-nota">Freelance no tiene sueldo garantizado: esto cubre huecos entre clientes.</p>
+    </div>
+    <div class="campo">
+      <label for="horas-evf">Horas facturables por semana</label>
+      <div class="campo-grupo campo-corto">
+        <input type="number" id="horas-evf" inputmode="decimal" min="1" max="80" step="any" value="25">
+        <span class="sufijo">hs</span>
+      </div>
+    </div>
+  </div>
+  <div class="resultado" id="res" hidden>
+    <p class="resultado-etiqueta">Necesitás facturar</p>
+    <p class="resultado-cifra"><span id="res-fact">—</span><span class="resultado-unidad"> por mes</span></p>
+    <p class="resultado-detalle" id="res-detalle"></p>
+  </div>
+</div>
+</section>
+
+<section class="prosa" style="margin-top:2rem">
+<p class="nota-chica"><strong>Qué estamos calculando:</strong> tu sueldo neto más la parte proporcional del aguinaldo (sueldo ÷ 12), más la prepaga que hoy no pagás, más el colchón que elijas — y encima la cuota de monotributo de la categoría que corresponda a esa facturación (servicios, tabla ARCA vigente desde el 1/8/2026). Es una comparación orientativa: no incluye vacaciones no gozadas, capacitación ni equipamiento. Tu caso puede variar.</p>
+</section>
+
+<script>
+(function () {
+  "use strict";
+  var TABLA = [
+    ["A", 12009410.45, 49527.18], ["B", 17595182.74, 56379.08], ["C", 24670494.31, 66020.12],
+    ["D", 30628651.43, 84612.93], ["E", 36028231.33, 119811.45], ["F", 45151659.41, 150784.21],
+    ["G", 53995798.87, 230312.94], ["H", 81924660.37, 522706.68], ["I", 91699761.90, 963747.86],
+    ["J", 105012519.20, 1167299.76], ["K", 126610838.75, 1614446.04]
+  ];
+  function $(id) { return document.getElementById(id); }
+  function num(id) { var v = parseFloat(String($(id).value).replace(",", ".")); return isFinite(v) && v >= 0 ? v : null; }
+  function ars(v) { return v.toLocaleString("es-AR", {style: "currency", currency: "ARS", maximumFractionDigits: 0}); }
+
+  function cuotaMono(factMensual) {
+    var anual = factMensual * 12;
+    for (var i = 0; i < TABLA.length; i++) {
+      if (anual <= TABLA[i][1]) return {cat: TABLA[i][0], cuota: TABLA[i][2]};
+    }
+    return null; // fuera del monotributo
+  }
+
+  var rateBlue = null;
+  fetch("https://dolarapi.com/v1/dolares/blue").then(function (r) { return r.json(); })
+    .then(function (d) { if (d && isFinite(d.venta)) { rateBlue = d.venta; calc(); } })
+    .catch(function () {});
+
+  function calc() {
+    var sueldo = num("sueldo");
+    var res = $("res");
+    if (!sueldo || sueldo <= 0) { res.hidden = true; return; }
+    var prepaga = num("prepaga") || 0;
+    var colchon = num("colchon") || 0;
+    var horasSem = num("horas-evf") || 25;
+
+    // ingreso objetivo: neto + aguinaldo proporcional + prepaga, con colchón
+    var objetivo = (sueldo * 13 / 12 + prepaga) * (1 + colchon / 100);
+    // iterar: la facturación necesaria incluye la cuota de monotributo de su propia categoría
+    var fact = objetivo, info = null;
+    for (var i = 0; i < 6; i++) {
+      info = cuotaMono(fact);
+      if (!info) break;
+      fact = objetivo + info.cuota;
+    }
+    var horasMes = horasSem * 4.33;
+    var tarifa = fact / horasMes;
+
+    $("res-fact").textContent = ars(fact);
+    var d;
+    if (info) {
+      d = "Eso es " + ars(tarifa) + " por hora con " + Math.round(horasMes) +
+        " horas facturables al mes. Incluye el aguinaldo proporcional (" + ars(sueldo / 12) + "), " +
+        (prepaga > 0 ? "tu prepaga, " : "") +
+        (colchon > 0 ? colchon + "% de colchón, " : "") +
+        "y la cuota de monotributo categoría " + info.cat + " (" + ars(info.cuota) + "/mes).";
+      if (rateBlue) d += " Al dólar blue equivale a facturar " + (fact / rateBlue).toLocaleString("es-AR", {style: "currency", currency: "USD", maximumFractionDigits: 0}) + " por mes.";
+    } else {
+      d = "Esa facturación supera el tope del monotributo: correspondería régimen general y estos números cambian — consultá un contador.";
+    }
+    $("res-detalle").textContent = d;
+    res.hidden = false;
+  }
+
+  ["sueldo", "prepaga", "colchon", "horas-evf"].forEach(function (id) {
+    $(id).addEventListener("input", calc);
+  });
+})();
+</script>
+
+</div>
+</main>
+<footer class="pie">
+  <div class="container">
+    <p>Esta página es una herramienta orientativa y no constituye asesoramiento financiero, impositivo ni profesional.</p>
+    <p class="pie-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/sobre">Sobre este sitio</a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
+  </div>
+</footer>
+<script>
+(function () {
+  var b = document.getElementById("btn-tema");
+  if (!b) return;
+  b.addEventListener("click", function () {
+    var r = document.documentElement;
+    var o = r.getAttribute("data-tema") === "oscuro";
+    if (o) r.removeAttribute("data-tema"); else r.setAttribute("data-tema", "oscuro");
+    try { localStorage.setItem("cc-tema", o ? "claro" : "oscuro"); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
