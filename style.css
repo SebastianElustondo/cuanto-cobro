@@ -708,7 +708,6 @@ tbody tr + tr {
 
 .card:hover {
   border-color: var(--verde-vivo);
-  transform: translateY(-2px);
 }
 
 .card h3 {
@@ -890,4 +889,101 @@ tbody tr + tr {
   .nav {
     gap: 0.8rem;
   }
+}
+
+/* ---------- Detalles con profundidad (2026-08-08) ----------
+   El único gesto animado por pantalla: el trazo se dibuja, las
+   tarjetas se inclinan en la periferia, el resultado se apoya.
+   Nada de esto compite con la calculadora. */
+
+/* el trazo del hero se dibuja al cargar */
+.trazo path {
+  stroke-dasharray: 230;
+  stroke-dashoffset: 230;
+  animation: trazo-dibuja 1.2s cubic-bezier(0.3, 0.6, 0.2, 1) 0.3s forwards;
+}
+
+@keyframes trazo-dibuja {
+  to { stroke-dashoffset: 0; }
+}
+
+/* tarjetas de guías y herramientas: hoja que se inclina con el cursor */
+.cards {
+  perspective: 900px;
+}
+
+.card {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    360px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(250, 247, 240, 0.4),
+    rgba(30, 122, 76, 0.04) 45%,
+    transparent 70%
+  );
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .card::after { display: none; }
+}
+
+/* el resultado entra apoyándose, una vez por cálculo */
+.resultado.se-apoya {
+  animation: resultado-apoya 0.4s cubic-bezier(0.2, 0.75, 0.25, 1);
+  transform-origin: 50% 100%;
+}
+
+@keyframes resultado-apoya {
+  from {
+    transform: perspective(600px) rotateX(12deg) translateY(8px);
+    opacity: 0.5;
+  }
+  to {
+    transform: perspective(600px) rotateX(0deg) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* numeral fantasma en las guías */
+body {
+  overflow-x: clip;
+}
+
+.articulo {
+  position: relative;
+}
+
+.gnum-guia {
+  position: absolute;
+  top: -0.05em;
+  left: -11vw;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(7rem, 14vw, 13rem);
+  line-height: 1;
+  color: var(--tinta);
+  opacity: 0.04;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trazo path { animation: none; stroke-dashoffset: 0; }
+  .resultado.se-apoya { animation: none; }
+  .card::after { display: none; }
 }
