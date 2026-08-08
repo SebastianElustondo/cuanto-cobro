@@ -235,6 +235,20 @@
     recalcAll();
   }
 
+  // el resultado "se apoya" al aparecer: una vez por cálculo, no por tecla
+  var REDUCE_MOTION = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function mostrarResultado(out) {
+    var estabaOculto = out.hidden;
+    out.hidden = false;
+    if (estabaOculto && !REDUCE_MOTION) {
+      out.classList.remove("se-apoya");
+      void out.offsetWidth;
+      out.classList.add("se-apoya");
+    }
+  }
+
   // ---------- Convertir una tarifa ----------
 
   function recalcConversor() {
@@ -252,7 +266,7 @@
     if (!rate) {
       $("conv-resultado").textContent = "—";
       $("conv-detalle").textContent = "Esperando la cotización del dólar… Si no carga, elegí “Personalizado” e ingresala a mano.";
-      out.hidden = false;
+      mostrarResultado(out);
       actualizarAcciones();
       return;
     }
@@ -266,7 +280,7 @@
       detalle += " Descontamos " + com + "% de comisión (" + fmtARS(bruto - neto) + ").";
     }
     $("conv-detalle").textContent = detalle;
-    out.hidden = false;
+    mostrarResultado(out);
     actualizarAcciones();
   }
 
@@ -334,7 +348,7 @@
       ver.hidden = true;
     }
 
-    out.hidden = false;
+    mostrarResultado(out);
     actualizarAcciones();
   }
 
@@ -491,4 +505,48 @@
   sincronizarMonedaGastos();
   loadRates();
   setInterval(actualizarHaceCuanto, 60000);
+})();
+
+/* Tilt 3D de las tarjetas de guías y herramientas (periferia; la
+   calculadora no participa). Solo mouse fino, sin reduced-motion. */
+(function () {
+  "use strict";
+  if (!window.matchMedia) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+  var MAX = 5, EASE = 0.1;
+  document.querySelectorAll(".card").forEach(function (card) {
+    var tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
+
+    function frame() {
+      cx += (tx - cx) * EASE;
+      cy += (ty - cy) * EASE;
+      card.style.transform = "rotateX(" + cx.toFixed(2) + "deg) rotateY(" + cy.toFixed(2) + "deg)";
+      card.style.boxShadow = (-cy * 1.5).toFixed(1) + "px " + (3 + cx * 1.5).toFixed(1) + "px 12px rgba(28, 24, 19, 0.09)";
+      if (Math.abs(tx - cx) + Math.abs(ty - cy) > 0.02) {
+        raf = requestAnimationFrame(frame);
+      } else {
+        raf = null;
+        if (!tx && !ty) { card.style.transform = ""; card.style.boxShadow = ""; }
+      }
+    }
+
+    function wake() { if (!raf) raf = requestAnimationFrame(frame); }
+
+    card.addEventListener("pointermove", function (e) {
+      var r = card.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width;
+      var py = (e.clientY - r.top) / r.height;
+      ty = (Math.max(0, Math.min(1, px)) - 0.5) * 2 * MAX;
+      tx = (0.5 - Math.max(0, Math.min(1, py))) * 2 * MAX;
+      card.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
+      card.style.setProperty("--my", (py * 100).toFixed(1) + "%");
+      wake();
+    });
+
+    card.addEventListener("pointerleave", function () {
+      tx = 0; ty = 0; wake();
+    });
+  });
 })();
