@@ -17,7 +17,6 @@
     oficial: "dólar oficial vendedor",
     cripto: "dólar cripto vendedor"
   };
-  var WEEKS_PER_YEAR = 52;
 
   // Rangos de referencia por rubro y seniority (USD por hora, clientes del
   // exterior). Misma tabla que se muestra en "Tarifas de referencia".
@@ -327,13 +326,12 @@
       return;
     }
 
-    var bruto = monto * rate;
-    var neto = bruto * (1 - Math.min(com, 99) / 100);
-    $("conv-resultado").textContent = fmtARS(neto);
+    var c = CALC.convertir(monto, rate, com);
+    $("conv-resultado").textContent = fmtARS(c.neto);
 
     var detalle = "Usando " + currentRateLabel() + " a " + fmtARS(rate) + ".";
     if (com > 0) {
-      detalle += " Descontamos " + com + "% de comisión (" + fmtARS(bruto - neto) + ").";
+      detalle += " Descontamos " + com + "% de comisión (" + fmtARS(c.comision) + ").";
     }
     $("conv-detalle").textContent = detalle;
     mostrarResultado(out);
@@ -358,11 +356,11 @@
       return;
     }
 
-    // semanas facturables del año: vacaciones en días hábiles (semana de 5)
-    var semanas = Math.max(1, WEEKS_PER_YEAR - vacaciones / 5);
-    var horasMes = horasSemana * semanas / 12;
-    var necesarioMes = (objetivo + gastos) * (1 + margen / 100);
-    var tarifa = necesarioMes / horasMes;
+    var r = CALC.tarifaInversa({
+      objetivo: objetivo, gastos: gastos, margen: margen,
+      horasSemana: horasSemana, vacaciones: vacaciones
+    });
+    var tarifa = r.tarifa, horasMes = r.horasMes;
 
     var fmt = moneda === "USD" ? fmtUSD : fmtARS;
     $("inv-resultado").textContent = fmt(tarifa);
@@ -388,10 +386,11 @@
     if (RUBROS[rubro] && tarifaUSD) {
       var lo = RUBROS[rubro][0], hi = RUBROS[rubro][1];
       var rango = "US$ " + lo + "–" + hi;
-      if (tarifaUSD < lo) {
+      var pos = CALC.posicionEnRango(tarifaUSD, lo, hi);
+      if (pos === "bajo") {
         ver.textContent = "▲ Por debajo del rango de tu rubro (" + rango + " por hora): tenés margen para apuntar más alto.";
         ver.className = "veredicto bajo";
-      } else if (tarifaUSD > hi) {
+      } else if (pos === "alto") {
         ver.textContent = "◆ Por encima del rango típico (" + rango + " por hora): sostenelo con especialización y portfolio.";
         ver.className = "veredicto ok";
       } else {
