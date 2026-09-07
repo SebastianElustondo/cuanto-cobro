@@ -1,0 +1,11 @@
+{
+  "name": "cuanto-cobro",
+  "private": true,
+  "description": "Calculadora de tarifas para freelancers argentinos (cobro.quovra.com)",
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check app.js && node --check calc.js && node --check tema.js && node --check monotributo-data.js",
+    "start": "python3 -m http.server 8080"
+  },
+  "license": "MIT"
+}
