@@ -45,7 +45,11 @@ npm run lint:html # html-validate sobre las 15 páginas
 npm run check:links # links internos y URLs del sitemap apuntan a archivos reales
 ```
 
-El workflow de GitHub Actions corre las dos cosas en cada push y pull request.
+El workflow de GitHub Actions corre todo eso en cada push y pull request, y además pasa Lighthouse (escritorio) sobre cuatro páginas representativas con umbrales: accesibilidad y SEO ≥ 95, buenas prácticas ≥ 90, rendimiento ≥ 90 (aviso). La configuración está en `lighthouserc.json`; para correrlo local hace falta Chrome:
+
+```bash
+npx @lhci/cli autorun
+```
 
 ## Deploy
 
