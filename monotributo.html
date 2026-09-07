@@ -21,6 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
 <script src="/tema.js"></script>
+<script src="/monotributo-data.js"></script>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f390f38aa291428d9671f337987cf33e"}'></script>
 </head>
 <body>
@@ -90,20 +91,7 @@
 <script>
 (function () {
   "use strict";
-  // [categoría, tope anual, cuota servicios, cuota comercio] — ARCA 1/8/2026
-  var TABLA = [
-    ["A", 12009410.45, 49527.18, 49527.18],
-    ["B", 17595182.74, 56379.08, 56379.08],
-    ["C", 24670494.31, 66020.12, 64530.58],
-    ["D", 30628651.43, 84612.93, 82564.81],
-    ["E", 36028231.33, 119811.45, 108267.51],
-    ["F", 45151659.41, 150784.21, 129930.65],
-    ["G", 53995798.87, 230312.94, 158815.05],
-    ["H", 81924660.37, 522706.68, 317895.01],
-    ["I", 91699761.90, 963747.86, 474992.78],
-    ["J", 105012519.20, 1167299.76, 580793.69],
-    ["K", 126610838.75, 1614446.04, 702103.24]
-  ];
+  var TABLA = MONOTRIBUTO.tabla;
   function $(id) { return document.getElementById(id); }
   function ars(v) { return v.toLocaleString("es-AR", {style: "currency", currency: "ARS", maximumFractionDigits: 0}); }
 
@@ -122,10 +110,7 @@
     var anual = $("fact-periodo").value === "mensual" ? v * 12 : v;
     var mensual = anual / 12;
     var esServ = $("actividad").value === "serv";
-    var cat = null;
-    for (var i = 0; i < TABLA.length; i++) {
-      if (anual <= TABLA[i][1]) { cat = TABLA[i]; break; }
-    }
+    var cat = MONOTRIBUTO.categoria(anual, esServ);
     if (!cat) {
       res.hidden = true;
       $("res-fuera-texto").innerHTML = "Con " + ars(anual) + " anuales superás el tope de la categoría K (" + ars(TABLA[10][1]) + "): quedás fuera del monotributo y corresponde el régimen general (autónomos + IVA + ganancias). Ahí sí o sí conviene un contador.";
@@ -133,9 +118,9 @@
       return;
     }
     fuera.hidden = true;
-    var cuota = esServ ? cat[2] : cat[3];
+    var cuota = cat.cuota;
     var pct = (cuota / mensual) * 100;
-    $("res-cat").textContent = cat[0];
+    $("res-cat").textContent = cat.cat;
     $("res-detalle").innerHTML = "Cuota mensual: <strong>" + ars(cuota) + "</strong> (impuesto + jubilación + obra social). Sobre una facturación de " + ars(mensual) + " por mes, la cuota representa el <strong>" + pct.toFixed(1) + "%</strong> de tus ingresos: te quedan " + ars(mensual - cuota) + " antes de tus gastos.";
     res.hidden = false;
   }
