@@ -9,7 +9,7 @@ Sitio 100% estático: HTML + CSS + JS vanilla, sin build ni dependencias. Todo c
 | Página | Qué hace |
 |---|---|
 | `index.html` | **Conversor de tarifa** (USD/hora → ARS con blue, oficial y MEP en vivo), **calculadora inversa** ("quiero ganar X por mes trabajando Y horas") y **tarifas de referencia** por rubro. |
-| `presupuesto.html` | **Presupuestador de proyectos**: horas por etapa, margen, adelanto, total en USD y ARS. |
+| `presupuesto.html` | **Presupuestador de proyectos**: horas estimadas, tarifa, margen de imprevistos, gastos directos y adelanto a pedir. |
 | `monotributo.html` | **Calculadora de monotributo 2026**: categoría según facturación y cuánto pagás por mes. |
 | `empleado-vs-freelance.html` | **Empleado vs freelance**: cuánto tenés que facturar para igualar un sueldo en relación de dependencia. |
 
