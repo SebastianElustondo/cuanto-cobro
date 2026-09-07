@@ -20,8 +20,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
-<script src="/tema.js"></script>
-<script src="/monotributo-data.js"></script>
+<script src="/js/tema.js"></script>
+<script src="/js/util.js"></script>
+<script src="/js/monotributo-data.js"></script>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f390f38aa291428d9671f337987cf33e"}'></script>
 </head>
 <body>
@@ -88,48 +89,6 @@
 <p class="nota-chica" style="margin-top:1rem"><strong>Aviso:</strong> valores oficiales de ARCA de aplicación desde el 1/08/2026. Las escalas se actualizan cada febrero y agosto; la categoría también puede depender de superficie, energía y alquileres. Esta calculadora es orientativa y no reemplaza asesoramiento impositivo. Más contexto en la <a href="/guias/monotributo-freelancers">guía de monotributo</a>.</p>
 </section>
 
-<script>
-(function () {
-  "use strict";
-  var TABLA = MONOTRIBUTO.tabla;
-  function $(id) { return document.getElementById(id); }
-  function ars(v) { return v.toLocaleString("es-AR", {style: "currency", currency: "ARS", maximumFractionDigits: 0}); }
-
-  // tabla visible
-  var filas = "";
-  for (var i = 0; i < TABLA.length; i++) {
-    var f = TABLA[i];
-    filas += "<tr><th scope=row>" + f[0] + "</th><td>" + ars(f[1]) + "</td><td>" + ars(f[2]) + "</td><td>" + ars(f[3]) + "</td></tr>";
-  }
-  $("tabla-mono").innerHTML = filas;
-
-  function calc() {
-    var v = parseFloat(String($("fact").value).replace(",", "."));
-    var res = $("res"), fuera = $("res-fuera");
-    if (!isFinite(v) || v <= 0) { res.hidden = true; fuera.hidden = true; return; }
-    var anual = $("fact-periodo").value === "mensual" ? v * 12 : v;
-    var mensual = anual / 12;
-    var esServ = $("actividad").value === "serv";
-    var cat = MONOTRIBUTO.categoria(anual, esServ);
-    if (!cat) {
-      res.hidden = true;
-      $("res-fuera-texto").innerHTML = "Con " + ars(anual) + " anuales superás el tope de la categoría K (" + ars(TABLA[10][1]) + "): quedás fuera del monotributo y corresponde el régimen general (autónomos + IVA + ganancias). Ahí sí o sí conviene un contador.";
-      fuera.hidden = false;
-      return;
-    }
-    fuera.hidden = true;
-    var cuota = cat.cuota;
-    var pct = (cuota / mensual) * 100;
-    $("res-cat").textContent = cat.cat;
-    $("res-detalle").innerHTML = "Cuota mensual: <strong>" + ars(cuota) + "</strong> (impuesto + jubilación + obra social). Sobre una facturación de " + ars(mensual) + " por mes, la cuota representa el <strong>" + pct.toFixed(1) + "%</strong> de tus ingresos: te quedan " + ars(mensual - cuota) + " antes de tus gastos.";
-    res.hidden = false;
-  }
-
-  ["fact"].forEach(function (id) { $(id).addEventListener("input", calc); });
-  $("fact-periodo").addEventListener("change", calc);
-  $("actividad").addEventListener("change", calc);
-})();
-</script>
 
 </div>
 </main>
@@ -139,5 +98,6 @@
     <p class="pie-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/sobre">Sobre este sitio</a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
   </div>
 </footer>
+<script src="/js/monotributo.js"></script>
 </body>
 </html>
