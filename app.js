@@ -244,6 +244,8 @@
     $("tab-hora").classList.toggle("on", !esConv);
     $("tab-convertir").setAttribute("aria-selected", esConv ? "true" : "false");
     $("tab-hora").setAttribute("aria-selected", esConv ? "false" : "true");
+    $("tab-convertir").tabIndex = esConv ? 0 : -1;
+    $("tab-hora").tabIndex = esConv ? -1 : 0;
     $("panel-convertir").hidden = !esConv;
     $("panel-convertir").classList.toggle("oculto", !esConv);
     $("panel-hora").hidden = esConv;
@@ -446,12 +448,18 @@
 
   // ---------- Tema claro/oscuro ----------
 
+  function reflejarTema() {
+    var oscuro = document.documentElement.getAttribute("data-tema") === "oscuro";
+    $("btn-tema").setAttribute("aria-pressed", oscuro ? "true" : "false");
+  }
+
   function toggleTema() {
     var raiz = document.documentElement;
     var oscuro = raiz.getAttribute("data-tema") === "oscuro";
     if (oscuro) raiz.removeAttribute("data-tema");
     else raiz.setAttribute("data-tema", "oscuro");
     try { localStorage.setItem("cc-tema", oscuro ? "claro" : "oscuro"); } catch (e) {}
+    reflejarTema();
   }
 
   // ---------- Varios ----------
@@ -471,6 +479,19 @@
   function bindEvents() {
     $("tab-convertir").addEventListener("click", function () { setTab("convertir"); });
     $("tab-hora").addEventListener("click", function () { setTab("hora"); });
+
+    // patrón WAI-ARIA de tabs: flechas, Home y End mueven la selección y el foco
+    document.querySelector(".tabs").addEventListener("keydown", function (e) {
+      var teclas = { ArrowLeft: 1, ArrowRight: 1, Home: 1, End: 1 };
+      if (!teclas[e.key]) return;
+      e.preventDefault();
+      var destino;
+      if (e.key === "Home") destino = "convertir";
+      else if (e.key === "End") destino = "hora";
+      else destino = state.tab === "convertir" ? "hora" : "convertir";
+      setTab(destino);
+      $("tab-" + destino).focus();
+    });
 
     $("casa-cambio").addEventListener("change", function () {
       toggleManual();
@@ -518,6 +539,7 @@
   }
 
   bindEvents();
+  reflejarTema();
   restaurarDesdeURL();
   setTab(state.tab);
   sincronizarMonedaGastos();
