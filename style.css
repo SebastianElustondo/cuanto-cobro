@@ -7,6 +7,37 @@
 /* verdes de la marca Quovra: --verde (profundo, #1E7A4C) para texto y
    acentos; --verde-vivo (#47B37C, el del punto de "Quovra.") para los
    detalles chicos que pueden brillar un poco */
+/* Fuentes de respaldo con métricas ajustadas: mientras descargan Fraunces e
+   Instrument Sans, Georgia y Arial ocupan el mismo ancho, así el texto no
+   salta de línea cuando llegan las fuentes web. Los size-adjust salen de
+   medir un párrafo real del sitio en cada fuente (no de tablas genéricas:
+   Georgia es un 12% más ancha que Fraunces y Arial un 1% más angosta que
+   Instrument Sans). */
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia");
+  font-style: normal;
+  size-adjust: 87.8%;
+  ascent-override: 111.4%;
+  descent-override: 29%;
+}
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia Italic"), local("Georgia-Italic");
+  font-style: italic;
+  size-adjust: 83.6%;
+  ascent-override: 117%;
+  descent-override: 30.5%;
+}
+@font-face {
+  font-family: "Instrument Sans Fallback";
+  src: local("Arial"), local("ArialMT");
+  size-adjust: 101%;
+  ascent-override: 96.1%;
+  descent-override: 24.8%;
+  line-gap-override: 0%;
+}
+
 :root {
   --fondo: #faf7f0; /* el crema exacto de quovra.com */
   --panel: #ffffff;
@@ -17,8 +48,8 @@
   --verde-vivo: #47b37c;
   --verde-suave: #eaf3ec;
   --alerta: #9a7b1f;
-  --font-serif: "Fraunces", Georgia, serif;
-  --font-sans: "Instrument Sans", -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Fraunces", "Fraunces Fallback", Georgia, serif;
+  --font-sans: "Instrument Sans", "Instrument Sans Fallback", -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", "Courier New", monospace;
 }
 
@@ -83,7 +114,11 @@ a {
   font-family: var(--font-mono);
   font-weight: 500;
   font-size: 0.76rem;
+  line-height: 1.5;
   letter-spacing: 0.02em;
+  /* alto fijo: el contenido llega después del fetch y no debe mover la página */
+  box-sizing: border-box;
+  height: calc(0.76rem * 1.5 + 0.76rem + 1px);
 }
 
 .ticker-pista {
@@ -196,13 +231,13 @@ a {
   font-size: clamp(2rem, 5.4vw, 3rem);
   line-height: 1.12;
   letter-spacing: -0.015em;
-  max-width: 18ch;
+  max-width: 11em; /* ≈18ch de Fraunces; en em para que no cambie al llegar la fuente */
 }
 
 .hero-bajada {
   margin-top: 0.8rem;
   color: var(--gris);
-  max-width: 56ch;
+  max-width: 37.3em; /* ≈56ch */
   font-size: 1rem;
 }
 
@@ -505,7 +540,7 @@ input::placeholder {
 .franja-info p {
   margin-top: 0.5rem;
   color: var(--gris);
-  max-width: 68ch;
+  max-width: 45.3em; /* ≈68ch */
 }
 
 /* ---------- Separadores y prosa ---------- */
@@ -538,7 +573,7 @@ input::placeholder {
 .prosa p {
   margin-top: 0.7rem;
   color: var(--gris);
-  max-width: 66ch;
+  max-width: 44em; /* ≈66ch */
 }
 
 .prosa p strong {
@@ -558,7 +593,7 @@ input::placeholder {
   margin-top: 1rem;
   font-size: 0.85rem;
   color: var(--gris);
-  max-width: 66ch;
+  max-width: 44em; /* ≈66ch */
 }
 
 /* FAQ */
@@ -666,7 +701,7 @@ tbody tr + tr {
   font-size: clamp(1.7rem, 4.6vw, 2.4rem);
   line-height: 1.15;
   letter-spacing: -0.015em;
-  max-width: 24ch;
+  max-width: 15em; /* ≈24ch de Fraunces */
 }
 
 .art-meta {
@@ -684,7 +719,7 @@ tbody tr + tr {
 .articulo ol {
   margin: 0.7rem 0 0 1.3rem;
   color: var(--gris);
-  max-width: 62ch;
+  max-width: 41.3em; /* ≈62ch */
 }
 
 .articulo li {
@@ -988,6 +1023,11 @@ body {
   opacity: 0.04;
   pointer-events: none;
   user-select: none;
+}
+/* el número va por CSS: es puramente decorativo y así no cuenta como texto
+   con bajo contraste para las herramientas de accesibilidad */
+.gnum-guia::before {
+  content: attr(data-n);
 }
 
 @media (prefers-reduced-motion: reduce) {
