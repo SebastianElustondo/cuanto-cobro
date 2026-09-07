@@ -19,6 +19,22 @@
   };
   var WEEKS_PER_YEAR = 52;
 
+  // Rangos de referencia por rubro y seniority (USD por hora, clientes del
+  // exterior). Misma tabla que se muestra en "Tarifas de referencia".
+  var RUBROS = {
+    "dev-jr": [10, 20], "dev-ssr": [20, 40], "dev-sr": [40, 60],
+    "dis-jr": [8, 15],  "dis-ssr": [15, 28], "dis-sr": [28, 40],
+    "red-jr": [5, 12],  "red-ssr": [12, 20], "red-sr": [20, 30],
+    "mkt-jr": [8, 15],  "mkt-ssr": [15, 30], "mkt-sr": [30, 45]
+  };
+  // valores que usaban los enlaces compartidos antes de tener claves por rubro
+  var RUBROS_LEGADO = {
+    "10-20": "dev-jr", "20-40": "dev-ssr", "40-60": "dev-sr",
+    "8-15": "dis-jr", "15-28": "dis-ssr", "28-40": "dis-sr",
+    "5-12": "red-jr", "12-20": "red-ssr", "20-30": "red-sr",
+    "8-15m": "mkt-jr", "15-30": "mkt-ssr", "30-45": "mkt-sr"
+  };
+
   var state = {
     rates: {},          // casa -> { venta, fecha }
     fechaRates: null,   // Date de la cotización más nueva
@@ -329,9 +345,8 @@
     var ver = $("inv-veredicto");
     var rubro = $("rubro").value;
     var tarifaUSD = moneda === "USD" ? tarifa : (rate ? tarifa / rate : null);
-    if (rubro && tarifaUSD) {
-      var partes = rubro.replace(/[^0-9-]/g, "").split("-");
-      var lo = parseFloat(partes[0]), hi = parseFloat(partes[1]);
+    if (RUBROS[rubro] && tarifaUSD) {
+      var lo = RUBROS[rubro][0], hi = RUBROS[rubro][1];
       var rango = "US$ " + lo + "–" + hi;
       if (tarifaUSD < lo) {
         ver.textContent = "▲ Por debajo del rango de tu rubro (" + rango + " por hora): tenés margen para apuntar más alto.";
@@ -423,7 +438,10 @@
     if (p.has("vac")) $("vacaciones").value = p.get("vac");
     if (p.has("gastos")) $("gastos").value = p.get("gastos");
     if (p.has("margen")) $("margen").value = p.get("margen");
-    if (p.has("rubro")) $("rubro").value = p.get("rubro");
+    if (p.has("rubro")) {
+      var rubroURL = p.get("rubro");
+      $("rubro").value = RUBROS_LEGADO[rubroURL] || rubroURL;
+    }
   }
 
   // ---------- Tema claro/oscuro ----------
