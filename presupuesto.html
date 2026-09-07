@@ -21,6 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
 <script src="/tema.js"></script>
+<script src="/calc.js"></script>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f390f38aa291428d9671f337987cf33e"}'></script>
 </head>
 <body>
@@ -122,10 +123,8 @@
     $("gastos-mon").textContent = m;
     var res = $("res");
     if (!horas || !tarifa) { res.hidden = true; $("acciones").hidden = true; return; }
-    var base = horas * tarifa;
-    var imprevistos = base * margen / 100;
-    var total = base + imprevistos + gastos;
-    var anticipo = total * adelanto / 100;
+    var p = CALC.presupuesto({horas: horas, tarifa: tarifa, margen: margen, gastos: gastos, adelanto: adelanto});
+    var base = p.base, imprevistos = p.imprevistos, total = p.total, anticipo = p.anticipo;
     $("res-total").textContent = fmt(total, m);
     var d = horas + " hs × " + fmt(tarifa, m) + " = " + fmt(base, m);
     if (margen > 0) d += " · imprevistos " + margen + "%: " + fmt(imprevistos, m);
@@ -151,15 +150,14 @@
     if (!horas || !tarifa) return;
     var margen = num("margen") || 0, gastos = num("gastos") || 0, adelanto = num("adelanto") || 0;
     var m = $("moneda").value;
-    var base = horas * tarifa;
-    var imprevistos = base * margen / 100;
-    var total = base + imprevistos + gastos;
+    var p = CALC.presupuesto({horas: horas, tarifa: tarifa, margen: margen, gastos: gastos, adelanto: adelanto});
+    var base = p.base, imprevistos = p.imprevistos, total = p.total;
     var hoy = new Date().toLocaleDateString("es-AR");
     var filas = "<tr><td>Trabajo estimado (" + horas + " hs \u00d7 " + fmt(tarifa, m) + ")</td><td>" + fmt(base, m) + "</td></tr>";
     if (margen > 0) filas += "<tr><td>Margen de imprevistos (" + margen + "%)</td><td>" + fmt(imprevistos, m) + "</td></tr>";
     if (gastos > 0) filas += "<tr><td>Gastos directos</td><td>" + fmt(gastos, m) + "</td></tr>";
     filas += "<tr class=hp-total><td>TOTAL</td><td>" + fmt(total, m) + "</td></tr>";
-    if (adelanto > 0) filas += "<tr><td>Adelanto para comenzar (" + adelanto + "%)</td><td>" + fmt(total * adelanto / 100, m) + "</td></tr>";
+    if (adelanto > 0) filas += "<tr><td>Adelanto para comenzar (" + adelanto + "%)</td><td>" + fmt(p.anticipo, m) + "</td></tr>";
     document.getElementById("hoja-presupuesto").innerHTML =
       "<h1>Presupuesto</h1><p class=hp-meta>Fecha: " + hoy + " \u00b7 Validez sugerida: 30 d\u00edas</p>" +
       "<table>" + filas + "</table>" +
