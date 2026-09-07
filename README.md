@@ -41,6 +41,8 @@ npm ci
 npm test          # node --test
 npm run lint      # eslint (única dependencia de desarrollo)
 npm run check     # node --check de cada script
+npm run lint:html # html-validate sobre las 15 páginas
+npm run check:links # links internos y URLs del sitemap apuntan a archivos reales
 ```
 
 El workflow de GitHub Actions corre las dos cosas en cada push y pull request.

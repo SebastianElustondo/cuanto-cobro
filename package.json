@@ -6,12 +6,15 @@
     "test": "node --test",
     "check": "for f in js/*.js; do node --check \"$f\" || exit 1; done",
     "start": "python3 -m http.server 8080",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lint:html": "html-validate \"*.html\" \"guias/*.html\"",
+    "check:links": "node scripts/check-links.js"
   },
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "eslint": "^9.39.5",
-    "globals": "^15.15.0"
+    "globals": "^15.15.0",
+    "html-validate": "^8.29.0"
   }
 }
