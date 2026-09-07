@@ -34,7 +34,7 @@ python3 -m http.server 8080
 
 ## Tests
 
-Las fórmulas viven en `calc.js` y `monotributo-data.js` como funciones puras, sin DOM, y se prueban con el runner de Node (sin dependencias):
+Las fórmulas viven en `js/calc.js` y `js/monotributo-data.js` como funciones puras, sin DOM, y se prueban con el runner de Node (sin dependencias):
 
 ```bash
 npm test          # node --test
@@ -52,7 +52,8 @@ Cloudflare Pages, publicando la raíz del repo. `_headers` define CSP y cabecera
 ```
 index.html, presupuesto.html, monotributo.html, empleado-vs-freelance.html   herramientas
 guias/                                                                        guías (una página por tema)
-app.js, style.css                                                             lógica y estilos compartidos
+js/                                                                           un archivo por herramienta + calc.js (fórmulas), util.js, tema.js, monotributo-data.js
+style.css                                                                     estilos compartidos
 privacidad.html, privacy.html, sobre.html                                     legales y "sobre"
 _headers, robots.txt, sitemap.xml, 404.html                                   infraestructura del sitio
 ```

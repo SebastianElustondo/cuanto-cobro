@@ -1,8 +1,8 @@
 // Pruebas de las fórmulas puras. Correr con: node --test
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const CALC = require("./calc.js");
-const MONOTRIBUTO = require("./monotributo-data.js");
+const CALC = require("./js/calc.js");
+const MONOTRIBUTO = require("./js/monotributo-data.js");
 
 const cerca = (a, b, eps = 1e-6) => assert.ok(Math.abs(a - b) < eps, `${a} ≠ ${b}`);
 

@@ -45,29 +45,15 @@
 
   // ---------- Helpers ----------
 
-  function $(id) {
-    return document.getElementById(id);
-  }
+  var $ = UTIL.byId;
+  var parseInput = UTIL.leerNumero;
 
   function fmtARS(value) {
-    return value.toLocaleString("es-AR", {
-      style: "currency",
-      currency: "ARS",
-      maximumFractionDigits: 0
-    });
+    return UTIL.formatearMoneda(value, "ARS", 0);
   }
 
   function fmtUSD(value) {
-    return value.toLocaleString("es-AR", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: value < 100 ? 2 : 0
-    });
-  }
-
-  function parseInput(el) {
-    var v = parseFloat(String(el.value).replace(",", "."));
-    return isFinite(v) && v >= 0 ? v : null;
+    return UTIL.formatearMoneda(value, "USD");
   }
 
   // Cotización activa según el select (o la manual)
