@@ -26,17 +26,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&amp;family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;family=IBM+Plex+Mono:wght@500;600&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script>
-    // aplicar el tema guardado antes del primer render para evitar el destello
-    (function () {
-      try {
-        var t = localStorage.getItem("cc-tema");
-        if (t === "oscuro" || (!t && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-          document.documentElement.setAttribute("data-tema", "oscuro");
-        }
-      } catch (e) {}
-    })();
-  </script>
+  <script src="/tema.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",

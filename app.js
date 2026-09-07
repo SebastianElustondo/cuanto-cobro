@@ -505,22 +505,6 @@
     }
   }
 
-  // ---------- Tema claro/oscuro ----------
-
-  function reflejarTema() {
-    var oscuro = document.documentElement.getAttribute("data-tema") === "oscuro";
-    $("btn-tema").setAttribute("aria-pressed", oscuro ? "true" : "false");
-  }
-
-  function toggleTema() {
-    var raiz = document.documentElement;
-    var oscuro = raiz.getAttribute("data-tema") === "oscuro";
-    if (oscuro) raiz.removeAttribute("data-tema");
-    else raiz.setAttribute("data-tema", "oscuro");
-    try { localStorage.setItem("cc-tema", oscuro ? "claro" : "oscuro"); } catch (e) {}
-    reflejarTema();
-  }
-
   // ---------- Varios ----------
 
   function toggleManual() {
@@ -594,11 +578,9 @@
       copiar(enlaceActual(), "Enlace copiado");
     });
 
-    $("btn-tema").addEventListener("click", toggleTema);
   }
 
   bindEvents();
-  reflejarTema();
   restaurarDesdeURL();
   setTab(state.tab);
   sincronizarMonedaGastos();
