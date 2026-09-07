@@ -2,6 +2,8 @@
 
 **[cobro.quovra.com](https://cobro.quovra.com)** — herramientas y guías de plata para freelancers argentinos.
 
+[![¿Cuánto cobro? — conversor de tarifa USD/hora a ARS con blue, oficial y MEP](og.png)](https://cobro.quovra.com)
+
 Sitio 100% estático: HTML + CSS + JS vanilla, sin build ni dependencias. Todo corre en el navegador; el único dato externo es la cotización del dólar, que viene de [DolarApi.com](https://dolarapi.com).
 
 ## Herramientas
