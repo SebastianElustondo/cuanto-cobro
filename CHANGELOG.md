@@ -2,6 +2,11 @@
 
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). Versionado semántico desde 1.0.0.
 
+## [Sin publicar]
+
+### Agregado
+- Enlaces de afiliados de Wise y Binance en la guía de cobros del exterior, con `rel="sponsored"`, aviso de transparencia al pie y política en "Sobre este sitio".
+
 ## [1.0.0] — 2026-09-07
 
 Primera versión etiquetada. El sitio está en producción desde agosto de 2026; esta versión marca el momento en que el repo pasó a ser público con licencia, tests y CI.
