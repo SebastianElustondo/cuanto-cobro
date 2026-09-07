@@ -32,7 +32,7 @@ module.exports = [
   { files: ["js/calc.js"], languageOptions: { globals: { CALC: "off" } } },
   { files: ["js/monotributo-data.js"], languageOptions: { globals: { MONOTRIBUTO: "off" } } },
   {
-    files: ["test.js", "eslint.config.js"],
+    files: ["test.js", "eslint.config.js", "scripts/**/*.js"],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: "commonjs",
