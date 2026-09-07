@@ -20,8 +20,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/style.css">
-<script src="/tema.js"></script>
-<script src="/monotributo-data.js"></script>
+<script src="/js/tema.js"></script>
+<script src="/js/util.js"></script>
+<script src="/js/monotributo-data.js"></script>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f390f38aa291428d9671f337987cf33e"}'></script>
 </head>
 <body>
@@ -90,63 +91,6 @@
 <p class="nota-chica"><strong>Qué estamos calculando:</strong> tu sueldo neto más la parte proporcional del aguinaldo (sueldo ÷ 12), más la prepaga que hoy no pagás, más el colchón que elijas — y encima la cuota de monotributo de la categoría que corresponda a esa facturación (servicios, tabla ARCA vigente desde el 1/8/2026). Es una comparación orientativa: no incluye vacaciones no gozadas, capacitación ni equipamiento. Tu caso puede variar.</p>
 </section>
 
-<script>
-(function () {
-  "use strict";
-  function $(id) { return document.getElementById(id); }
-  function num(id) { var v = parseFloat(String($(id).value).replace(",", ".")); return isFinite(v) && v >= 0 ? v : null; }
-  function ars(v) { return v.toLocaleString("es-AR", {style: "currency", currency: "ARS", maximumFractionDigits: 0}); }
-
-  function cuotaMono(factMensual) {
-    return MONOTRIBUTO.categoria(factMensual * 12, true); // null = fuera del monotributo
-  }
-
-  var rateBlue = null;
-  fetch("https://dolarapi.com/v1/dolares/blue").then(function (r) { return r.json(); })
-    .then(function (d) { if (d && isFinite(d.venta)) { rateBlue = d.venta; calc(); } })
-    .catch(function () {});
-
-  function calc() {
-    var sueldo = num("sueldo");
-    var res = $("res");
-    if (!sueldo || sueldo <= 0) { res.hidden = true; return; }
-    var prepaga = num("prepaga") || 0;
-    var colchon = num("colchon") || 0;
-    var horasSem = num("horas-evf") || 25;
-
-    // ingreso objetivo: neto + aguinaldo proporcional + prepaga, con colchón
-    var objetivo = (sueldo * 13 / 12 + prepaga) * (1 + colchon / 100);
-    // iterar: la facturación necesaria incluye la cuota de monotributo de su propia categoría
-    var fact = objetivo, info = null;
-    for (var i = 0; i < 6; i++) {
-      info = cuotaMono(fact);
-      if (!info) break;
-      fact = objetivo + info.cuota;
-    }
-    var horasMes = horasSem * 4.33;
-    var tarifa = fact / horasMes;
-
-    $("res-fact").textContent = ars(fact);
-    var d;
-    if (info) {
-      d = "Eso es " + ars(tarifa) + " por hora con " + Math.round(horasMes) +
-        " horas facturables al mes. Incluye el aguinaldo proporcional (" + ars(sueldo / 12) + "), " +
-        (prepaga > 0 ? "tu prepaga, " : "") +
-        (colchon > 0 ? colchon + "% de colchón, " : "") +
-        "y la cuota de monotributo categoría " + info.cat + " (" + ars(info.cuota) + "/mes).";
-      if (rateBlue) d += " Al dólar blue equivale a facturar " + (fact / rateBlue).toLocaleString("es-AR", {style: "currency", currency: "USD", maximumFractionDigits: 0}) + " por mes.";
-    } else {
-      d = "Esa facturación supera el tope del monotributo: correspondería régimen general y estos números cambian — consultá un contador.";
-    }
-    $("res-detalle").textContent = d;
-    res.hidden = false;
-  }
-
-  ["sueldo", "prepaga", "colchon", "horas-evf"].forEach(function (id) {
-    $(id).addEventListener("input", calc);
-  });
-})();
-</script>
 
 </div>
 </main>
@@ -156,5 +100,6 @@
     <p class="pie-quovra">Un producto de <a class="quovra-link" href="https://quovra.com" target="_blank" rel="noopener">Quovra<span>.</span></a> · <a href="/sobre">Sobre este sitio</a> · <a href="/privacidad">Privacidad</a> · <a href="https://quovra.com/terminos" target="_blank" rel="noopener">Términos</a></p>
   </div>
 </footer>
+<script src="/js/empleado-vs-freelance.js"></script>
 </body>
 </html>
