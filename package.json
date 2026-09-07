@@ -5,7 +5,13 @@
   "scripts": {
     "test": "node --test",
     "check": "for f in js/*.js; do node --check \"$f\" || exit 1; done",
-    "start": "python3 -m http.server 8080"
+    "start": "python3 -m http.server 8080",
+    "lint": "eslint ."
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "globals": "^15.15.0"
+  }
 }

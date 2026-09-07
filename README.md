@@ -37,7 +37,9 @@ python3 -m http.server 8080
 Las fórmulas viven en `js/calc.js` y `js/monotributo-data.js` como funciones puras, sin DOM, y se prueban con el runner de Node (sin dependencias):
 
 ```bash
+npm ci
 npm test          # node --test
+npm run lint      # eslint (única dependencia de desarrollo)
 npm run check     # node --check de cada script
 ```
 
