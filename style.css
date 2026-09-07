@@ -230,6 +230,28 @@ a {
   border-bottom: 1px solid var(--linea);
 }
 
+/* enlace "saltar al contenido": invisible hasta recibir foco por teclado */
+.saltar {
+  position: absolute;
+  left: 1rem;
+  top: -3rem;
+  z-index: 100;
+  padding: 0.5rem 0.9rem;
+  background: var(--verde);
+  color: #fff;
+  border-radius: 6px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top 0.15s ease;
+}
+.saltar:focus {
+  top: 0.75rem;
+}
+#contenido:focus {
+  outline: none;
+}
+
 .tab {
   appearance: none;
   flex: 1;

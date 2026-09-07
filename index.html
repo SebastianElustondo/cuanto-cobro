@@ -87,6 +87,7 @@
   </script>
 </head>
 <body>
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
 
   <!-- Ticker de cotizaciones: cinta fina con datos reales, se pausa al hover -->
   <div class="ticker" id="ticker" hidden aria-hidden="true">
@@ -100,12 +101,12 @@
         <a href="/guias/">Guías</a>
         <a href="#herramientas">Herramientas</a>
         <a href="#como-funciona">Cómo funciona</a>
-        <button type="button" id="btn-tema" aria-label="Cambiar entre modo claro y oscuro">◐</button>
+        <button type="button" id="btn-tema" aria-label="Modo oscuro" aria-pressed="false">◐</button>
       </nav>
     </div>
   </header>
 
-  <main>
+  <main id="contenido" tabindex="-1">
     <div class="container">
 
       <!-- Hero compacto: la promesa y enseguida la herramienta -->
@@ -119,7 +120,7 @@
       <section class="calculadora" aria-label="Calculadora">
         <div class="tabs" role="tablist" aria-label="Qué querés calcular">
           <button type="button" class="tab on" id="tab-convertir" role="tab" aria-selected="true" aria-controls="panel-convertir">Convertir una tarifa</button>
-          <button type="button" class="tab" id="tab-hora" role="tab" aria-selected="false" aria-controls="panel-hora">Calcular mi valor por hora</button>
+          <button type="button" class="tab" id="tab-hora" role="tab" aria-selected="false" aria-controls="panel-hora" tabindex="-1">Calcular mi valor por hora</button>
         </div>
 
         <!-- Panel 1: convertir USD → ARS -->
