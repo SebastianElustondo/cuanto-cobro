@@ -176,12 +176,28 @@
     window.print();
   });
 
+  function aviso(msg) {
+    $("aviso").textContent = msg;
+    setTimeout(function () { $("aviso").textContent = ""; }, 1800);
+  }
+  function copiarFallback(texto) {
+    var ta = document.createElement("textarea");
+    ta.value = texto; ta.setAttribute("readonly", "");
+    ta.style.position = "fixed"; ta.style.top = "-1000px";
+    document.body.appendChild(ta); ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+    aviso(ok ? "Desglose copiado" : "No se pudo copiar");
+  }
   $("btn-copiar").addEventListener("click", function () {
-    if (!ultimo || !navigator.clipboard) return;
-    navigator.clipboard.writeText(ultimo).then(function () {
-      $("aviso").textContent = "Desglose copiado";
-      setTimeout(function () { $("aviso").textContent = ""; }, 1800);
-    }).catch(function () {});
+    if (!ultimo) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(ultimo).then(function () { aviso("Desglose copiado"); })
+        .catch(function () { copiarFallback(ultimo); });
+    } else {
+      copiarFallback(ultimo);
+    }
   });
 })();
 </script>
