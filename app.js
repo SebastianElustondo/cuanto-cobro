@@ -35,9 +35,12 @@
     "8-15m": "mkt-jr", "15-30": "mkt-ssr", "30-45": "mkt-sr"
   };
 
+  var CACHE_KEY = "cc-cotizaciones";
+
   var state = {
     rates: {},          // casa -> { venta, fecha }
     fechaRates: null,   // Date de la cotización más nueva
+    desdeCache: false,  // true si las cotizaciones vienen del último guardado
     tab: "convertir"
   };
 
@@ -113,11 +116,18 @@
           throw new Error("Sin cotizaciones útiles");
         }
         state.fechaRates = latest ? new Date(latest) : null;
+        state.desdeCache = false;
+        guardarCache(latest);
         renderFranja();
         renderSelect();
         loadMonedas();
       })
       .catch(function () {
+        if (restaurarCache()) {
+          renderFranja();
+          renderSelect();
+          return;
+        }
         $("franja-valores").textContent =
           "No pudimos obtener la cotización. Elegí “Personalizado” en el tipo de cambio e ingresala a mano: todo sigue funcionando.";
       })
@@ -125,6 +135,27 @@
         if (timer) clearTimeout(timer);
         recalcAll();
       });
+  }
+
+  // Última cotización conocida: si la API no responde (sin conexión, caída,
+  // bloqueador), la calculadora sigue andando con el último valor guardado.
+  function guardarCache(fecha) {
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({ rates: state.rates, fecha: fecha || null }));
+    } catch (e) {}
+  }
+
+  function restaurarCache() {
+    try {
+      var c = JSON.parse(localStorage.getItem(CACHE_KEY));
+      if (!c || !c.rates || !Object.keys(c.rates).length) return false;
+      state.rates = c.rates;
+      state.fechaRates = c.fecha ? new Date(c.fecha) : null;
+      state.desdeCache = true;
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // ---------- Ticker: los tres dólares + euro y real ----------
@@ -210,16 +241,23 @@
   }
 
   function actualizarHaceCuanto() {
-    if (!state.fechaRates) return;
+    if (!state.fechaRates) {
+      if (state.desdeCache) $("franja-meta").textContent = "Sin conexión con la fuente: mostramos la última cotización guardada en este navegador.";
+      return;
+    }
     var min = Math.max(0, Math.round((Date.now() - state.fechaRates.getTime()) / 60000));
     var texto;
     if (min < 1) texto = "recién";
     else if (min < 60) texto = "hace " + min + (min === 1 ? " minuto" : " minutos");
-    else {
+    else if (min < 48 * 60) {
       var hs = Math.round(min / 60);
       texto = "hace " + hs + (hs === 1 ? " hora" : " horas");
+    } else {
+      texto = "hace " + Math.round(min / 1440) + " días";
     }
-    $("franja-meta").textContent = "Actualizado " + texto + " · precio vendedor";
+    $("franja-meta").textContent = state.desdeCache
+      ? "Sin conexión con la fuente: última cotización guardada, " + texto + " · precio vendedor"
+      : "Actualizado " + texto + " · precio vendedor";
   }
 
   // el select muestra el precio junto a cada casa cuando ya lo tenemos
