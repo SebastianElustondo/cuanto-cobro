@@ -1,48 +1,47 @@
 # ¿Cuánto cobro?
 
-Calculadora de tarifas para freelancers argentinos. Sitio 100% estático: HTML + CSS + JS vanilla, sin build ni dependencias.
+**[cobro.quovra.com](https://cobro.quovra.com)** — herramientas y guías de plata para freelancers argentinos.
 
-**Qué hace:**
+Sitio 100% estático: HTML + CSS + JS vanilla, sin build ni dependencias. Todo corre en el navegador; el único dato externo es la cotización del dólar, que viene de [DolarApi.com](https://dolarapi.com).
 
-1. **Conversor de tarifa** — tarifa por hora en USD → equivalente en ARS con cotización en vivo (blue, oficial y MEP) desde [DolarApi.com](https://dolarapi.com).
-2. **Calculadora inversa** — "quiero ganar X por mes trabajando Y horas/semana" → tarifa por hora necesaria, con ajuste por % de horas facturables.
-3. **Tarifas de referencia** — rangos orientativos por rubro (dev, diseño, redacción, marketing).
+## Herramientas
 
-Si la API de cotizaciones no responde, la página degrada con elegancia: muestra un campo para ingresar la cotización a mano y todo sigue funcionando.
+| Página | Qué hace |
+|---|---|
+| `index.html` | **Conversor de tarifa** (USD/hora → ARS con blue, oficial y MEP en vivo), **calculadora inversa** ("quiero ganar X por mes trabajando Y horas") y **tarifas de referencia** por rubro. |
+| `presupuesto.html` | **Presupuestador de proyectos**: horas estimadas, tarifa, margen de imprevistos, gastos directos y adelanto a pedir. |
+| `monotributo.html` | **Calculadora de monotributo 2026**: categoría según facturación y cuánto pagás por mes. |
+| `empleado-vs-freelance.html` | **Empleado vs freelance**: cuánto tenés que facturar para igualar un sueldo en relación de dependencia. |
+
+Si la API de cotizaciones no responde, cada herramienta muestra un campo para cargar la cotización a mano y sigue funcionando.
+
+## Guías (`guias/`)
+
+Monotributo para freelancers · Factura E y exportación de servicios · Cómo cobrar del exterior (PayPal, Payoneer, Wise, cripto) · Dólar MEP paso a paso · Cómo presupuestar un proyecto · Cómo subirle la tarifa a un cliente.
 
 ## Correr local
 
 No hay build. Cualquier servidor estático sirve:
 
 ```bash
-cd cuanto-cobro
 python3 -m http.server 8080
 # abrir http://localhost:8080
 ```
 
-(También funciona abriendo `index.html` directo en el navegador; el fetch a dolarapi.com anda igual porque la API tiene CORS abierto.)
+## Deploy
 
-## Deploy en Render (static site)
+Cloudflare Pages, publicando la raíz del repo. `_headers` define CSP y cabeceras de seguridad; `404.html` corta el fallback SPA de Pages. Cada merge a `main` despliega.
 
-1. Subí la carpeta a un repo de GitHub.
-2. En Render: **New → Static Site**, conectá el repo.
-3. Configuración:
-   - **Build command:** (vacío)
-   - **Publish directory:** `.` (o la subcarpeta si el repo tiene más cosas)
-4. Deploy. Opcional: dominio propio en Settings → Custom Domains.
+## Estructura
 
-Es el mismo esquema de costo cero que trazoloco.com.
+```
+index.html, presupuesto.html, monotributo.html, empleado-vs-freelance.html   herramientas
+guias/                                                                        guías (una página por tema)
+app.js, style.css                                                             lógica y estilos compartidos
+privacidad.html, privacy.html, sobre.html                                     legales y "sobre"
+_headers, robots.txt, sitemap.xml, 404.html                                   infraestructura del sitio
+```
 
-**Pendientes antes de ir a producción:**
+## Licencia
 
-- Reemplazar el `href` del `<link rel="canonical">` en `index.html` por el dominio real.
-- Reemplazar el bloque comentado "AdSense placeholder" en `index.html` por el snippet real cuando el sitio esté aprobado.
-
-## Keywords SEO objetivo
-
-- **"cuanto cobrar como freelancer argentina"** — intención directa, competencia baja, matchea el h1.
-- **"calculadora tarifa freelance"** — término de herramienta, tráfico recurrente.
-- **"cuanto cobrar por hora programador / diseñador freelance"** — long-tail por rubro, cubierto por la tabla de referencia.
-- **"convertir tarifa dolares a pesos dolar blue"** — captura búsquedas de conversión con intención freelance, cubierto por el conversor con cotización en vivo.
-
-El contenido de la página (guía de 300+ palabras, FAQ con schema.org FAQPage, tabla por rubro) está pensado para rankear en esas variantes y sus combinaciones.
+MIT. Las cifras de monotributo y las tarifas de referencia son orientativas; verificá siempre contra la fuente oficial.
