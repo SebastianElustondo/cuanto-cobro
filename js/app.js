@@ -193,7 +193,6 @@
     // menos el ancho de la ventana o queda un hueco al final del loop.
     var pista = $("ticker-pista");
     pista.innerHTML = base;
-    $("ticker").hidden = false;
     var anchoBase = pista.scrollWidth || 1;
     var copias = Math.max(1, Math.ceil((window.innerWidth * 1.25) / anchoBase));
     var mitad = new Array(copias + 1).join(base);
