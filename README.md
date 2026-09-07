@@ -1,5 +1,7 @@
 # ¿Cuánto cobro?
 
+[![CI](https://github.com/SebastianElustondo/cuanto-cobro/actions/workflows/ci.yml/badge.svg)](https://github.com/SebastianElustondo/cuanto-cobro/actions/workflows/ci.yml)
+
 **[cobro.quovra.com](https://cobro.quovra.com)** — herramientas y guías de plata para freelancers argentinos.
 
 [![¿Cuánto cobro? — conversor de tarifa USD/hora a ARS con blue, oficial y MEP](og.png)](https://cobro.quovra.com)
@@ -29,6 +31,17 @@ No hay build. Cualquier servidor estático sirve:
 python3 -m http.server 8080
 # abrir http://localhost:8080
 ```
+
+## Tests
+
+Las fórmulas viven en `calc.js` y `monotributo-data.js` como funciones puras, sin DOM, y se prueban con el runner de Node (sin dependencias):
+
+```bash
+npm test          # node --test
+npm run check     # node --check de cada script
+```
+
+El workflow de GitHub Actions corre las dos cosas en cada push y pull request.
 
 ## Deploy
 
