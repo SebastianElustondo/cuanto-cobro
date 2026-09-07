@@ -427,14 +427,35 @@
     $("acciones").hidden = !resultadoVisible();
   }
 
+  // Copia con la API moderna y, si no está (contexto no seguro, navegadores
+  // viejos, permiso denegado), con un textarea temporal + execCommand.
+  function copiarTextoFallback(texto) {
+    var ta = document.createElement("textarea");
+    ta.value = texto;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
+  }
+
   function copiar(texto, aviso) {
-    function ok() {
-      var el = $("aviso-copiado");
-      el.textContent = aviso;
+    var el = $("aviso-copiado");
+    function mostrar(msg) {
+      el.textContent = msg;
       setTimeout(function () { el.textContent = ""; }, 1800);
     }
+    function fallback() {
+      mostrar(copiarTextoFallback(texto) ? aviso : "No se pudo copiar");
+    }
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(texto).then(ok).catch(function () {});
+      navigator.clipboard.writeText(texto).then(function () { mostrar(aviso); }).catch(fallback);
+    } else {
+      fallback();
     }
   }
 
