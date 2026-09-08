@@ -1,10 +1,3 @@
-#!/usr/bin/env node
-/*
- * Chequea que todos los links, scripts, estilos e imágenes internos de las
- * páginas apunten a archivos que existen. Entiende las URLs limpias de
- * Cloudflare Pages (/monotributo → monotributo.html, /guias/ → guias/index.html).
- * Sin dependencias. Sale con código 1 si hay algo roto.
- */
 const fs = require("fs");
 const path = require("path");
 
@@ -21,7 +14,7 @@ const paginas = [];
 
 function existe(destino, desde) {
   let ruta = destino.split("#")[0].split("?")[0];
-  if (!ruta) return true; // ancla en la misma página
+  if (!ruta) return true;
   const base = ruta.startsWith("/") ? raiz : path.dirname(desde);
   ruta = ruta.startsWith("/") ? ruta.slice(1) : ruta;
   const candidatos = [ruta, ruta + ".html", path.join(ruta, "index.html")];
@@ -43,7 +36,6 @@ for (const pagina of paginas) {
   }
 }
 
-// las URLs del sitemap también tienen que existir
 const sitemap = fs.readFileSync(path.join(raiz, "sitemap.xml"), "utf8");
 for (const m of sitemap.matchAll(/<loc>https:\/\/cobro\.quovra\.com(\/[^<]*)<\/loc>/g)) {
   if (!existe(m[1], path.join(raiz, "sitemap.xml"))) rotos.push(`sitemap.xml → ${m[1]}`);

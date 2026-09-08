@@ -1,4 +1,3 @@
-/* Presupuestador de proyectos: horas × tarifa, imprevistos, gastos, adelanto y hoja imprimible. */
 (function () {
   "use strict";
   var $ = UTIL.byId;

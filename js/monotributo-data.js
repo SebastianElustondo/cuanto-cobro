@@ -1,12 +1,5 @@
-/*
- * Escalas del monotributo (ARCA), vigentes desde el 1/8/2026.
- * Única fuente para la calculadora de monotributo y el comparador
- * empleado vs freelance. Al actualizar las escalas, tocar solo este archivo.
- *
- * Cada fila: [categoría, tope de facturación anual, cuota servicios, cuota comercio]
- * La cuota incluye impuesto integrado + aporte jubilatorio + obra social.
- */
 var MONOTRIBUTO = {
+  fuente: "ARCA, escalas del monotributo",
   vigencia: "1/8/2026",
   tabla: [
     ["A", 12009410.45, 49527.18, 49527.18],
@@ -21,7 +14,6 @@ var MONOTRIBUTO = {
     ["J", 105012519.20, 1167299.76, 580793.69],
     ["K", 126610838.75, 1614446.04, 702103.24]
   ],
-  // categoría y cuota mensual para una facturación anual; null si supera K
   categoria: function (facturacionAnual, esServicios) {
     for (var i = 0; i < this.tabla.length; i++) {
       var f = this.tabla[i];

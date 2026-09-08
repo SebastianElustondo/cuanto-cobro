@@ -1,4 +1,3 @@
-// Pruebas de las fórmulas puras. Correr con: node --test
 const test = require("node:test");
 const assert = require("node:assert/strict");
 const CALC = require("./js/calc.js");
@@ -15,8 +14,8 @@ test("convertir: sin comisión es monto × tipo de cambio", () => {
 
 test("convertir: descuenta la comisión y la acota a 99%", () => {
   cerca(CALC.convertir(100, 1500, 5.4).neto, 141900);
-  cerca(CALC.convertir(100, 1000, 250).neto, 1000); // 99% como máximo
-  cerca(CALC.convertir(100, 1000, -10).neto, 100000); // negativa = sin comisión
+  cerca(CALC.convertir(100, 1000, 250).neto, 1000);
+  cerca(CALC.convertir(100, 1000, -10).neto, 100000);
 });
 
 test("tarifaInversa: caso base sin vacaciones ni extras", () => {
@@ -67,10 +66,10 @@ test("monotributo: la tabla está ordenada y las cuotas crecen", () => {
 
 test("monotributo: categoría por facturación anual", () => {
   assert.equal(MONOTRIBUTO.categoria(1, true).cat, "A");
-  assert.equal(MONOTRIBUTO.categoria(12009410.45, true).cat, "A"); // tope inclusive
+  assert.equal(MONOTRIBUTO.categoria(12009410.45, true).cat, "A");
   assert.equal(MONOTRIBUTO.categoria(12009410.46, true).cat, "B");
   const c = MONOTRIBUTO.categoria(20e6, false);
   assert.equal(c.cat, "C");
-  assert.equal(c.cuota, 64530.58); // comercio, no servicios
+  assert.equal(c.cuota, 64530.58);
   assert.equal(MONOTRIBUTO.categoria(126610838.76, true), null);
 });

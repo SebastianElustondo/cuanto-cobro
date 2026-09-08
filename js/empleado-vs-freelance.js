@@ -1,4 +1,3 @@
-/* Empleado vs freelance: cuánto facturar para igualar un sueldo neto, monotributo incluido. */
 (function () {
   "use strict";
   var $ = UTIL.byId;
@@ -6,7 +5,7 @@
   function ars(v) { return UTIL.formatearMoneda(v, "ARS", 0); }
 
   function cuotaMono(factMensual) {
-    return MONOTRIBUTO.categoria(factMensual * 12, true); // null = fuera del monotributo
+    return MONOTRIBUTO.categoria(factMensual * 12, true);
   }
 
   var rateBlue = null;
@@ -22,9 +21,7 @@
     var colchon = num("colchon") || 0;
     var horasSem = num("horas-evf") || 25;
 
-    // ingreso objetivo: neto + aguinaldo proporcional + prepaga, con colchón
     var objetivo = (sueldo * 13 / 12 + prepaga) * (1 + colchon / 100);
-    // iterar: la facturación necesaria incluye la cuota de monotributo de su propia categoría
     var fact = objetivo, info = null;
     for (var i = 0; i < 6; i++) {
       info = cuotaMono(fact);
