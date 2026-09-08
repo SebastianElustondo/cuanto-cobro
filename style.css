@@ -17,9 +17,22 @@
   font-family: "Fraunces Fallback";
   src: local("Georgia");
   font-style: normal;
+  font-weight: 100 500;
   size-adjust: 87.8%;
   ascent-override: 111.4%;
   descent-override: 29%;
+}
+/* los títulos van en 600: con Georgia regular en negrita sintética quedaban
+   un 4% más angostos que Fraunces 600 y el h1 ganaba una línea al llegar la
+   fuente. Georgia Bold real, medida contra los títulos del sitio. */
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia Bold"), local("Georgia-Bold");
+  font-style: normal;
+  font-weight: 600 900;
+  size-adjust: 76.5%;
+  ascent-override: 127.8%;
+  descent-override: 33.3%;
 }
 @font-face {
   font-family: "Fraunces Fallback";
