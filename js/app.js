@@ -1,10 +1,3 @@
-/*
- * ¿Cuánto cobro? — lógica de la calculadora ("editorial financiera").
- * Sin dependencias. Cotizaciones desde https://dolarapi.com/v1/dolares
- * Respuesta confirmada: array de objetos
- *   { moneda, casa, nombre, compra, venta, fechaActualizacion }
- * con casas: oficial, blue, bolsa (MEP), contadoconliqui, mayorista, cripto, tarjeta.
- */
 (function () {
   "use strict";
 
@@ -18,15 +11,12 @@
     cripto: "dólar cripto vendedor"
   };
 
-  // Rangos de referencia por rubro y seniority (USD por hora, clientes del
-  // exterior). Misma tabla que se muestra en "Tarifas de referencia".
   var RUBROS = {
     "dev-jr": [10, 20], "dev-ssr": [20, 40], "dev-sr": [40, 60],
     "dis-jr": [8, 15],  "dis-ssr": [15, 28], "dis-sr": [28, 40],
     "red-jr": [5, 12],  "red-ssr": [12, 20], "red-sr": [20, 30],
     "mkt-jr": [8, 15],  "mkt-ssr": [15, 30], "mkt-sr": [30, 45]
   };
-  // valores que usaban los enlaces compartidos antes de tener claves por rubro
   var RUBROS_LEGADO = {
     "10-20": "dev-jr", "20-40": "dev-ssr", "40-60": "dev-sr",
     "8-15": "dis-jr", "15-28": "dis-ssr", "28-40": "dis-sr",
@@ -37,13 +27,11 @@
   var CACHE_KEY = "cc-cotizaciones";
 
   var state = {
-    rates: {},          // casa -> { venta, fecha }
-    fechaRates: null,   // Date de la cotización más nueva
-    desdeCache: false,  // true si las cotizaciones vienen del último guardado
+    rates: {},
+    fechaRates: null,
+    desdeCache: false,
     tab: "convertir"
   };
-
-  // ---------- Helpers ----------
 
   var $ = UTIL.byId;
   var parseInput = UTIL.leerNumero;
@@ -56,7 +44,6 @@
     return UTIL.formatearMoneda(value, "USD");
   }
 
-  // Cotización activa según el select (o la manual)
   function currentRate() {
     var casa = $("casa-cambio").value;
     if (casa === "personalizado") return parseInput($("cambio-manual"));
@@ -69,8 +56,6 @@
     if (casa === "personalizado") return "tipo de cambio personalizado";
     return NOMBRES[casa] || "";
   }
-
-  // ---------- Cotizaciones ----------
 
   function loadRates() {
     var controller = typeof AbortController !== "undefined" ? new AbortController() : null;
@@ -122,8 +107,6 @@
       });
   }
 
-  // Última cotización conocida: si la API no responde (sin conexión, caída,
-  // bloqueador), la calculadora sigue andando con el último valor guardado.
   function guardarCache(fecha) {
     try {
       localStorage.setItem(CACHE_KEY, JSON.stringify({ rates: state.rates, fecha: fecha || null }));
@@ -142,8 +125,6 @@
       return false;
     }
   }
-
-  // ---------- Ticker: los tres dólares + euro y real ----------
 
   function loadMonedas() {
     fetch("https://dolarapi.com/v1/cotizaciones")
@@ -176,7 +157,6 @@
     items = items.concat(extras);
     if (!items.length) return;
 
-    // monedas chicas (peso chileno ~$1,50) necesitan decimales
     function fmtTicker(v) {
       return v.toLocaleString("es-AR", {
         style: "currency",
@@ -189,20 +169,16 @@
         '</span><span class="t-valor">' + fmtTicker(it.venta) + "</span></span>";
     }).join("");
 
-    // La animación corre hasta -50%, así que cada mitad tiene que cubrir al
-    // menos el ancho de la ventana o queda un hueco al final del loop.
     var pista = $("ticker-pista");
     pista.innerHTML = base;
     var anchoBase = pista.scrollWidth || 1;
     var copias = Math.max(1, Math.ceil((window.innerWidth * 1.25) / anchoBase));
     var mitad = new Array(copias + 1).join(base);
     pista.innerHTML = mitad + mitad;
-    // velocidad constante (~30 px/s) sin importar el ancho de pantalla
     pista.style.animationDuration = Math.round((anchoBase * copias) / 30) + "s";
     state.tickerAncho = anchoBase;
   }
 
-  // si agrandan la ventana, la tanda puede quedar corta: rearmar
   var tickerResizeTimer = null;
   window.addEventListener("resize", function () {
     if (!state.tickerAncho) return;
@@ -244,7 +220,6 @@
       : "Actualizado " + texto + " · precio vendedor";
   }
 
-  // el select muestra el precio junto a cada casa cuando ya lo tenemos
   function renderSelect() {
     var sel = $("casa-cambio");
     for (var i = 0; i < sel.options.length; i++) {
@@ -256,8 +231,6 @@
       }
     }
   }
-
-  // ---------- Tabs ----------
 
   function setTab(tab) {
     state.tab = tab;
@@ -275,7 +248,6 @@
     recalcAll();
   }
 
-  // el resultado "se apoya" al aparecer: una vez por cálculo, no por tecla
   var REDUCE_MOTION = window.matchMedia &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -288,8 +260,6 @@
       out.classList.add("se-apoya");
     }
   }
-
-  // ---------- Convertir una tarifa ----------
 
   function recalcConversor() {
     var out = $("resultado-convertir");
@@ -322,8 +292,6 @@
     mostrarResultado(out);
     actualizarAcciones();
   }
-
-  // ---------- Calcular mi valor por hora ----------
 
   function recalcInversa() {
     var out = $("resultado-hora");
@@ -364,7 +332,6 @@
     }
     $("inv-detalle").textContent = detalle;
 
-    // comparación con el rango del rubro (siempre en USD por hora)
     var ver = $("inv-veredicto");
     var rubro = $("rubro").value;
     var tarifaUSD = moneda === "USD" ? tarifa : (rate ? tarifa / rate : null);
@@ -396,8 +363,6 @@
     recalcInversa();
   }
 
-  // ---------- Acciones: copiar resultado / enlace ----------
-
   function resultadoVisible() {
     if (state.tab === "convertir") {
       return $("resultado-convertir").hidden ? null :
@@ -411,8 +376,6 @@
     $("acciones").hidden = !resultadoVisible();
   }
 
-  // Copia con la API moderna y, si no está (contexto no seguro, navegadores
-  // viejos, permiso denegado), con un textarea temporal + execCommand.
   function copiarTextoFallback(texto) {
     var ta = document.createElement("textarea");
     ta.value = texto;
@@ -465,7 +428,6 @@
     return location.origin + location.pathname + "?" + p.toString();
   }
 
-  // restaurar un enlace compartido
   function restaurarDesdeURL() {
     var p = new URLSearchParams(location.search);
     if (!p.has("tab")) return;
@@ -489,25 +451,19 @@
     }
   }
 
-  // ---------- Varios ----------
-
   function toggleManual() {
     var manual = $("casa-cambio").value === "personalizado";
     $("grupo-manual").classList.toggle("oculto", !manual);
   }
 
-  // la moneda de los gastos acompaña a la del objetivo
   function sincronizarMonedaGastos() {
     $("gastos-moneda").textContent = $("objetivo-moneda").value;
   }
-
-  // ---------- Eventos ----------
 
   function bindEvents() {
     $("tab-convertir").addEventListener("click", function () { setTab("convertir"); });
     $("tab-hora").addEventListener("click", function () { setTab("hora"); });
 
-    // patrón WAI-ARIA de tabs: flechas, Home y End mueven la selección y el foco
     document.querySelector(".tabs").addEventListener("keydown", function (e) {
       var teclas = { ArrowLeft: 1, ArrowRight: 1, Home: 1, End: 1 };
       if (!teclas[e.key]) return;
@@ -538,7 +494,6 @@
     });
     $("rubro").addEventListener("change", recalcInversa);
 
-    // chips de comisión típica por plataforma
     Array.prototype.forEach.call(document.querySelectorAll(".chip[data-com]"), function (chip) {
       chip.addEventListener("click", function () {
         $("comision").value = chip.getAttribute("data-com");
@@ -561,7 +516,6 @@
     $("btn-enlace").addEventListener("click", function () {
       copiar(enlaceActual(), "Enlace copiado");
     });
-
   }
 
   bindEvents();
@@ -572,8 +526,6 @@
   setInterval(actualizarHaceCuanto, 60000);
 })();
 
-/* Tilt 3D de las tarjetas de guías y herramientas (periferia; la
-   calculadora no participa). Solo mouse fino, sin reduced-motion. */
 (function () {
   "use strict";
   if (!window.matchMedia) return;

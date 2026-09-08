@@ -4,6 +4,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 
 ## [Sin publicar]
 
+### Cambiado
+- Código sin comentarios en JS, CSS y HTML (123 quitados); las explicaciones viven en el README y el CHANGELOG, y la procedencia de las escalas del monotributo pasó a los campos `fuente` y `vigencia`.
+
 ### Agregado
 - Enlaces de afiliados de Wise y Binance en la guía de cobros del exterior, con `rel="sponsored"`, aviso de transparencia al pie y política en "Sobre este sitio".
 
