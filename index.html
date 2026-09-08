@@ -79,7 +79,6 @@
 <body>
   <a class="saltar" href="#contenido">Saltar al contenido</a>
 
-  <!-- Ticker de cotizaciones: cinta fina con datos reales, se pausa al hover -->
   <div class="ticker" id="ticker" aria-hidden="true">
     <div class="ticker-pista" id="ticker-pista"></div>
   </div>
@@ -99,21 +98,18 @@
   <main id="contenido" tabindex="-1">
     <div class="container">
 
-      <!-- Hero compacto: la promesa y enseguida la herramienta -->
       <section class="hero">
         <h1>Poné un precio a tu trabajo.</h1>
         <p class="hero-bajada">Calculadora de tarifas para freelancers argentinos: convertí una tarifa en dólares o calculá cuánto cobrar por hora para alcanzar tu objetivo mensual, con supuestos que podés revisar.</p>
         <svg class="trazo" viewBox="0 0 220 10" preserveAspectRatio="none" aria-hidden="true"><path d="M3 7 C55 3, 150 8, 217 4" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
       </section>
 
-      <!-- Calculadora principal -->
       <section class="calculadora" aria-label="Calculadora">
         <div class="tabs" role="tablist" aria-label="Qué querés calcular">
           <button type="button" class="tab on" id="tab-convertir" role="tab" aria-selected="true" aria-controls="panel-convertir">Convertir una tarifa</button>
           <button type="button" class="tab" id="tab-hora" role="tab" aria-selected="false" aria-controls="panel-hora" tabindex="-1">Calcular mi valor por hora</button>
         </div>
 
-        <!-- Panel 1: convertir USD → ARS -->
         <div class="panel" id="panel-convertir" role="tabpanel" aria-labelledby="tab-convertir">
           <div class="campos">
             <div class="campo">
@@ -144,7 +140,6 @@
                 <input type="number" id="comision" inputmode="decimal" min="0" max="99" step="any" placeholder="0">
                 <span class="sufijo">%</span>
               </div>
-              <!-- presets orientativos: cada plataforma cambia sus tarifas seguido -->
               <div class="chips" role="group" aria-label="Comisiones típicas por plataforma">
                 <button type="button" class="chip" data-com="5.4">PayPal ~5,4%</button>
                 <button type="button" class="chip" data-com="3">Payoneer ~3%</button>
@@ -162,7 +157,6 @@
           </div>
         </div>
 
-        <!-- Panel 2: calculadora inversa -->
         <div class="panel oculto" id="panel-hora" role="tabpanel" aria-labelledby="tab-hora" hidden>
           <div class="campos">
             <div class="campo">
@@ -235,7 +229,6 @@
           </div>
         </div>
 
-        <!-- Acciones sobre el resultado -->
         <div class="acciones" id="acciones" hidden>
           <button type="button" id="btn-copiar">Copiar resultado</button>
           <button type="button" id="btn-enlace">Copiar enlace</button>
@@ -243,7 +236,6 @@
         </div>
       </section>
 
-      <!-- Cotizaciones: franja compacta, secundaria -->
       <section id="cotizaciones" class="franja-cotizaciones" aria-label="Cotizaciones del dólar hoy">
         <p class="franja-valores" id="franja-valores">Cargando cotizaciones…</p>
         <p class="franja-meta" id="franja-meta"></p>
@@ -255,7 +247,6 @@
 
       <div class="separador" aria-hidden="true"></div>
 
-      <!-- Qué estamos calculando: transparencia de la fórmula -->
       <section id="como-funciona" class="prosa" aria-labelledby="como-titulo">
         <h2 id="como-titulo">Qué estamos calculando</h2>
         <p><strong>Convertir una tarifa:</strong> multiplicamos tu monto en dólares por el tipo de cambio elegido y, si cargaste una comisión, la descontamos. Nada más: monto × cotización − comisión.</p>
@@ -265,7 +256,6 @@
 
       <div class="separador" aria-hidden="true"></div>
 
-      <!-- Más herramientas -->
       <section id="herramientas" class="prosa" aria-labelledby="herramientas-titulo">
         <h2 id="herramientas-titulo">Más herramientas</h2>
         <div class="cards">
@@ -277,7 +267,6 @@
 
       <div class="separador" aria-hidden="true"></div>
 
-      <!-- Guías destacadas -->
       <section class="prosa" aria-labelledby="guias-titulo">
         <h2 id="guias-titulo">Guías</h2>
         <div class="cards">
@@ -290,7 +279,6 @@
 
       <div class="separador" aria-hidden="true"></div>
 
-      <!-- Tarifas de referencia -->
       <section aria-labelledby="referencia-titulo" class="prosa">
         <h2 id="referencia-titulo">Tarifas de referencia por rubro</h2>
         <p class="seccion-bajada">Rangos habituales en USD por hora para freelancers argentinos que trabajan con clientes del exterior. Para clientes locales, los valores suelen ser entre 30% y 50% menores.</p>
@@ -337,7 +325,6 @@
 
       <div class="separador" aria-hidden="true"></div>
 
-      <!-- Contenido SEO -->
       <section class="prosa" aria-labelledby="guia-titulo">
         <h2 id="guia-titulo">Cómo calcular tu tarifa freelance</h2>
         <p>El error más común al empezar a trabajar freelance es copiar la tarifa de otro o, peor, dividir tu último sueldo en relación de dependencia por 160 horas. Ninguna de las dos cosas refleja tu realidad. Una tarifa freelance bien calculada parte de tres números: cuánto necesitás ganar, cuántas horas podés facturar de verdad y qué costos tenés que cubrir vos que antes cubría un empleador.</p>
@@ -353,7 +340,6 @@
 
       <div class="separador" aria-hidden="true"></div>
 
-      <!-- FAQ -->
       <section class="prosa" aria-labelledby="faq-titulo">
         <h2 id="faq-titulo">Preguntas frecuentes</h2>
         <details>
@@ -391,7 +377,6 @@
   <script src="/js/util.js"></script>
   <script src="/js/calc.js"></script>
   <script src="/js/app.js"></script>
-  <!-- Cloudflare Web Analytics -->
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f390f38aa291428d9671f337987cf33e"}'></script>
 </body>
 </html>

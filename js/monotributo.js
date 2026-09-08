@@ -1,11 +1,9 @@
-/* Calculadora de monotributo: categoría y cuota según facturación (datos en monotributo-data.js). */
 (function () {
   "use strict";
   var TABLA = MONOTRIBUTO.tabla;
   var $ = UTIL.byId;
   function ars(v) { return UTIL.formatearMoneda(v, "ARS", 0); }
 
-  // tabla visible
   var filas = "";
   for (var i = 0; i < TABLA.length; i++) {
     var f = TABLA[i];

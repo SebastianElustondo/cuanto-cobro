@@ -1,8 +1,3 @@
-/*
- * Tema claro/oscuro compartido por todas las páginas.
- * Se carga en el <head> sin defer a propósito: aplica el tema guardado antes
- * del primer render y así no hay destello de fondo claro en modo oscuro.
- */
 (function () {
   "use strict";
   var raiz = document.documentElement;

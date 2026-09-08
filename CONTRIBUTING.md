@@ -36,4 +36,4 @@ El CI corre eso mismo más Lighthouse. Un PR pequeño con un solo cambio se revi
 
 - Español rioplatense en textos y comentarios, con voseo. Código en español también (nombres de funciones y variables), salvo APIs del navegador.
 - Las fórmulas van en `js/calc.js` o `js/monotributo-data.js` como funciones puras, con su test.
-- Todo dato oficial lleva fuente y fecha de vigencia en un comentario.
+- El código va sin comentarios: lo que necesita explicación se documenta en el README (sección "Decisiones") o en el CHANGELOG. Todo dato oficial lleva su fuente y fecha de vigencia como campos del propio objeto de datos (ver `fuente` y `vigencia` en `js/monotributo-data.js`).
