@@ -34,6 +34,15 @@
     $(id).addEventListener("input", calc);
   });
   $("moneda").addEventListener("change", calc);
+
+  (function restaurarDesdeURL() {
+    var p = new URLSearchParams(location.search);
+    ["horas", "tarifa", "margen", "gastos", "adelanto"].forEach(function (id) {
+      if (p.has(id) && isFinite(parseFloat(p.get(id)))) $(id).value = p.get(id);
+    });
+    if (p.get("moneda") === "ARS" || p.get("moneda") === "USD") $("moneda").value = p.get("moneda");
+    calc();
+  })();
   $("btn-pdf").addEventListener("click", function () {
     var horas = num("horas"), tarifa = num("tarifa");
     if (!horas || !tarifa) return;

@@ -7,7 +7,7 @@
     "check": "for f in js/*.js; do node --check \"$f\" || exit 1; done",
     "start": "python3 -m http.server 8080",
     "lint": "eslint .",
-    "lint:html": "html-validate \"*.html\" \"guias/*.html\"",
+    "lint:html": "html-validate \"*.html\" \"guias/*.html\" \"tarifas/*.html\"",
     "check:links": "node scripts/check-links.js"
   },
   "license": "MIT",
