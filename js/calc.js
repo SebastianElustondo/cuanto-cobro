@@ -25,6 +25,15 @@ var CALC = {
     return { base: base, imprevistos: imprevistos, total: total, anticipo: total * (o.adelanto || 0) / 100 };
   },
 
+  objetivoFreelance: function (o) {
+    return (o.sueldo * 13 / 12 + (o.prepaga || 0)) * (1 + (o.colchon || 0) / 100);
+  },
+
+  sueldoEquivalente: function (o) {
+    var disponible = (o.ingreso - (o.cuota || 0)) / (1 + (o.colchon || 0) / 100) - (o.prepaga || 0);
+    return disponible * 12 / 13;
+  },
+
   posicionEnRango: function (tarifa, lo, hi) {
     if (tarifa < lo) return "bajo";
     if (tarifa > hi) return "alto";

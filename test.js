@@ -90,3 +90,16 @@ test("monotributo: las tablas escritas en el HTML coinciden con los datos", () =
     assert.equal(filaDe(guia, cat), `<td>${pesos(tope)}</td><td>${pesos(servicios)}</td>`, `guía, categoría ${cat}`);
   }
 });
+
+test("contractor: objetivoFreelance suma aguinaldo, prepaga y colchón", () => {
+  cerca(CALC.objetivoFreelance({ sueldo: 1200000 }), 1300000);
+  cerca(CALC.objetivoFreelance({ sueldo: 1200000, prepaga: 100000, colchon: 10 }), 1540000);
+});
+
+test("contractor: sueldoEquivalente es la inversa de objetivoFreelance más la cuota", () => {
+  const o = { sueldo: 2500000, prepaga: 180000, colchon: 15 };
+  const cuota = 119811.45;
+  const ingreso = CALC.objetivoFreelance(o) + cuota;
+  cerca(CALC.sueldoEquivalente({ ingreso, cuota, prepaga: o.prepaga, colchon: o.colchon }), o.sueldo, 1e-4);
+  assert.ok(CALC.sueldoEquivalente({ ingreso: 50000, cuota: 49527.18, prepaga: 100000 }) < 0);
+});
