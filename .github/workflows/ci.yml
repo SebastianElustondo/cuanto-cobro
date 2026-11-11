@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Lighthouse (desktop) sobre 4 páginas representativas
+      - name: Lighthouse (desktop) sobre 6 páginas representativas
         uses: treosh/lighthouse-ci-action@v12
         with:
           configPath: ./lighthouserc.json

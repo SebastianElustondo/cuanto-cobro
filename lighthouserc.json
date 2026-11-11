@@ -6,6 +6,8 @@
         "http://localhost/index.html",
         "http://localhost/monotributo.html",
         "http://localhost/presupuesto.html",
+        "http://localhost/contractor.html",
+        "http://localhost/tarifas/programador-freelance.html",
         "http://localhost/guias/cobrar-del-exterior.html"
       ],
       "numberOfRuns": 1,

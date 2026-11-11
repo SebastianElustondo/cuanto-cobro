@@ -18,6 +18,8 @@ Herramientas y guías de plata para freelancers argentinos: qué cobrar por hora
 | [`/presupuesto`](https://cobro.quovra.com/presupuesto) | **Presupuestador de proyectos**: horas × tarifa, imprevistos, gastos directos, adelanto, y una hoja imprimible. |
 | [`/monotributo`](https://cobro.quovra.com/monotributo) | **Calculadora de monotributo**: categoría y cuota mensual según facturación, con las escalas vigentes de ARCA. |
 | [`/empleado-vs-freelance`](https://cobro.quovra.com/empleado-vs-freelance) | **Empleado vs freelance**: cuánto facturar para igualar un sueldo neto, aguinaldo, prepaga y monotributo incluidos. |
+| [`/contractor`](https://cobro.quovra.com/contractor) | **Calculadora contractor**: a qué sueldo neto equivale una oferta en dólares, o cuánto pedir en USD para igualar un sueldo. |
+| [`/tarifas/`](https://cobro.quovra.com/tarifas/) | **Tarifas de referencia por oficio**: lo que publican colegios y asociaciones (programación, diseño, redes, traducción), con fuente y fecha. Cómo se mantienen: [docs/fuentes-tarifas.md](docs/fuentes-tarifas.md). |
 
 Y seis **guías** en [`/guias/`](https://cobro.quovra.com/guias/): monotributo, factura E, cobrar del exterior, dólar MEP, presupuestar un proyecto y subir la tarifa a un cliente.
 
@@ -64,13 +66,13 @@ Cada push y cada pull request pasan por GitHub Actions:
 
 | Paso | Herramienta | Qué cuida |
 |---|---|---|
-| `npm test` | `node --test` | Las fórmulas (10 casos, bordes incluidos) y que las tablas del monotributo escritas en el HTML coincidan con los datos |
+| `npm test` | `node --test` | Las fórmulas (12 casos, bordes incluidos) y que las tablas del monotributo escritas en el HTML coincidan con los datos |
 | `npm run lint` | ESLint 9 | Errores reales en el JS, dialecto ES5 |
 | `npm run lint:html` | html-validate | HTML válido y accesible (scope en tablas, ARIA bien usado) |
 | `npm run check:links` | script propio | Todo href/src interno y toda URL del sitemap apuntan a un archivo real |
 | Lighthouse | lighthouse-ci | Accesibilidad y SEO ≥ 95, buenas prácticas ≥ 90, rendimiento ≥ 90 |
 
-Lighthouse hoy, en las cuatro páginas medidas: rendimiento 100, accesibilidad 100, SEO 100.
+Lighthouse en las páginas medidas antes de sumar `/contractor` y `/tarifas/`: rendimiento 100, accesibilidad 100, SEO 100.
 
 ## Correr local
 
@@ -85,7 +87,9 @@ Para probar con las cabeceras reales (CSP incluida): `npx wrangler pages dev .`
 
 ```
 index.html, presupuesto.html, monotributo.html, empleado-vs-freelance.html   herramientas
+contractor.html                                                               herramienta
 guias/                                                                        una página por guía
+tarifas/                                                                      tarifas de referencia por oficio
 js/                                                                           un archivo por herramienta + calc, util, tema, monotributo-data
 style.css                                                                     estilos (sistema "editorial financiera", modo oscuro)
 _headers, robots.txt, sitemap.xml, 404.html                                   infraestructura del sitio

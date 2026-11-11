@@ -9,6 +9,9 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 - Código sin comentarios en JS, CSS y HTML (123 quitados); las explicaciones viven en el README y el CHANGELOG, y la procedencia de las escalas del monotributo pasó a los campos `fuente` y `vigencia`.
 
 ### Agregado
+- `/contractor`: calculadora en las dos direcciones (oferta en USD → sueldo neto equivalente; sueldo → USD a pedir), con las fórmulas en `js/calc.js` y sus tests.
+- `/tarifas/`: índice y páginas por oficio (programador, diseñador, community manager, traductor) con valores de referencia de CPCIBA, CTPCBA, AATI y FCEDU-UNER, cada uno con fecha y enlace. Fuentes y mantenimiento en `docs/fuentes-tarifas.md`.
+- El presupuestador acepta `horas`, `tarifa`, `moneda`, `margen`, `gastos` y `adelanto` en la URL, para enlazarlo precargado.
 - Preguntas frecuentes visibles y datos estructurados (`WebApplication` + `FAQPage`) en `/monotributo`, `/presupuesto` y `/empleado-vs-freelance`.
 - La tabla del monotributo está escrita en el HTML de la calculadora (antes la armaba el JS), con un test que la compara contra `js/monotributo-data.js`.
 - Enlazado interno: la home enlaza las seis guías, cada guía cierra con "Seguí con", y el índice de guías enlaza las herramientas.
