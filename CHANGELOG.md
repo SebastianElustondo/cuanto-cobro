@@ -5,9 +5,14 @@ Formato basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/). V
 ## [Sin publicar]
 
 ### Cambiado
+- `sitemap.xml`: fechas de modificación reales y sin las páginas de privacidad.
 - Código sin comentarios en JS, CSS y HTML (123 quitados); las explicaciones viven en el README y el CHANGELOG, y la procedencia de las escalas del monotributo pasó a los campos `fuente` y `vigencia`.
 
 ### Agregado
+- Preguntas frecuentes visibles y datos estructurados (`WebApplication` + `FAQPage`) en `/monotributo`, `/presupuesto` y `/empleado-vs-freelance`.
+- La tabla del monotributo está escrita en el HTML de la calculadora (antes la armaba el JS), con un test que la compara contra `js/monotributo-data.js`.
+- Enlazado interno: la home enlaza las seis guías, cada guía cierra con "Seguí con", y el índice de guías enlaza las herramientas.
+- `twitter:card` en todas las páginas con Open Graph.
 - Enlaces de afiliados de Wise y Binance en la guía de cobros del exterior, con `rel="sponsored"`, aviso de transparencia al pie y política en "Sobre este sitio".
 
 ## [1.0.0] — 2026-09-07

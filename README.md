@@ -64,7 +64,7 @@ Cada push y cada pull request pasan por GitHub Actions:
 
 | Paso | Herramienta | Qué cuida |
 |---|---|---|
-| `npm test` | `node --test` | Las fórmulas (9 casos, bordes incluidos) |
+| `npm test` | `node --test` | Las fórmulas (10 casos, bordes incluidos) y que las tablas del monotributo escritas en el HTML coincidan con los datos |
 | `npm run lint` | ESLint 9 | Errores reales en el JS, dialecto ES5 |
 | `npm run lint:html` | html-validate | HTML válido y accesible (scope en tablas, ARIA bien usado) |
 | `npm run check:links` | script propio | Todo href/src interno y toda URL del sitemap apuntan a un archivo real |
