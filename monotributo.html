@@ -14,6 +14,7 @@
 <meta property="og:url" content="https://cobro.quovra.com/monotributo">
 <meta property="og:site_name" content="Cuánto Cobro">
 <meta property="og:image" content="https://cobro.quovra.com/og.png">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#faf7f0">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23faf6ec'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='40' font-weight='700' fill='%232e7d54' text-anchor='middle'%3E$%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,6 +24,7 @@
 <script src="/js/tema.js"></script>
 <script src="/js/util.js"></script>
 <script src="/js/monotributo-data.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "name": "Calculadora de monotributo", "description": "Categoría de monotributo y cuota mensual según tu facturación, con las escalas de ARCA vigentes desde el 1/8/2026.", "url": "https://cobro.quovra.com/monotributo", "applicationCategory": "FinanceApplication", "operatingSystem": "Web", "inLanguage": "es-AR", "isAccessibleForFree": true, "offers": {"@type": "Offer", "price": "0", "priceCurrency": "ARS"}, "publisher": {"@type": "Organization", "name": "Quovra", "url": "https://quovra.com"}}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "¿Cuánto se paga de monotributo por mes en 2026?", "acceptedAnswer": {"@type": "Answer", "text": "Con las escalas de ARCA vigentes desde el 1/8/2026, la cuota mensual para servicios va de $49.527,18 en la categoría A a $1.614.446,04 en la K. Las categorías A y B pagan lo mismo en servicios y en venta de productos; desde la C, la cuota de venta de productos es menor."}}, {"@type": "Question", "name": "¿Cuál es el tope de facturación del monotributo?", "acceptedAnswer": {"@type": "Answer", "text": "La categoría más alta, la K, permite facturar hasta $126.610.838,75 en los últimos 12 meses (unos $10.550.903 por mes en promedio). Si lo superás quedás excluido y pasás al régimen general. La categoría A llega hasta $12.009.410,45 anuales."}}, {"@type": "Question", "name": "¿Qué incluye la cuota del monotributo?", "acceptedAnswer": {"@type": "Answer", "text": "Tres componentes en un solo pago mensual: el impuesto integrado, el aporte jubilatorio (SIPA) y la obra social. La calculadora muestra la suma de los tres, que es lo que efectivamente pagás."}}, {"@type": "Question", "name": "¿Cuándo hay que recategorizarse?", "acceptedAnswer": {"@type": "Answer", "text": "Dos veces por año, en febrero y agosto, hasta el día 5. Se miran los últimos 12 meses de actividad. Según ARCA, si seguís en la misma categoría o tenés menos de 6 meses de actividad no tenés que hacer nada. Más detalle en la guía de monotributo."}}, {"@type": "Question", "name": "¿Facturar al exterior cuenta para la categoría?", "acceptedAnswer": {"@type": "Answer", "text": "Sí. La exportación de servicios se factura con factura E y suma a tu facturación anual igual que la local, convertida a pesos."}}]}]}</script>
   <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "f390f38aa291428d9671f337987cf33e"}'></script>
 </head>
 <body>
@@ -83,10 +85,55 @@
 <summary>Ver la tabla completa (vigente desde el 1/8/2026)</summary>
 <div class="table-wrap" style="margin-top:0.8rem"><table>
 <thead><tr><th scope="col">Cat.</th><th scope="col">Tope anual</th><th scope="col">Cuota servicios</th><th scope="col">Cuota comercio</th></tr></thead>
-<tbody id="tabla-mono"></tbody>
+<tbody id="tabla-mono">
+<tr><th scope="row">A</th><td>$12.009.410</td><td>$49.527</td><td>$49.527</td></tr>
+<tr><th scope="row">B</th><td>$17.595.183</td><td>$56.379</td><td>$56.379</td></tr>
+<tr><th scope="row">C</th><td>$24.670.494</td><td>$66.020</td><td>$64.531</td></tr>
+<tr><th scope="row">D</th><td>$30.628.651</td><td>$84.613</td><td>$82.565</td></tr>
+<tr><th scope="row">E</th><td>$36.028.231</td><td>$119.811</td><td>$108.268</td></tr>
+<tr><th scope="row">F</th><td>$45.151.659</td><td>$150.784</td><td>$129.931</td></tr>
+<tr><th scope="row">G</th><td>$53.995.799</td><td>$230.313</td><td>$158.815</td></tr>
+<tr><th scope="row">H</th><td>$81.924.660</td><td>$522.707</td><td>$317.895</td></tr>
+<tr><th scope="row">I</th><td>$91.699.762</td><td>$963.748</td><td>$474.993</td></tr>
+<tr><th scope="row">J</th><td>$105.012.519</td><td>$1.167.300</td><td>$580.794</td></tr>
+<tr><th scope="row">K</th><td>$126.610.839</td><td>$1.614.446</td><td>$702.103</td></tr>
+</tbody>
 </table></div>
 </details>
 <p class="nota-chica" style="margin-top:1rem"><strong>Aviso:</strong> valores oficiales de ARCA de aplicación desde el 1/08/2026. Las escalas se actualizan cada febrero y agosto; la categoría también puede depender de superficie, energía y alquileres. Esta calculadora es orientativa y no reemplaza asesoramiento impositivo. Más contexto en la <a href="/guias/monotributo-freelancers">guía de monotributo</a>.</p>
+</section>
+
+<section class="prosa" aria-labelledby="faq-titulo" style="margin-top:2rem">
+<h2 id="faq-titulo">Preguntas frecuentes</h2>
+<details>
+<summary>¿Cuánto se paga de monotributo por mes en 2026?</summary>
+<p>Con las escalas de ARCA vigentes desde el 1/8/2026, la cuota mensual para servicios va de <strong>$49.527,18</strong> en la categoría A a <strong>$1.614.446,04</strong> en la K. Las categorías A y B pagan lo mismo en servicios y en venta de productos; desde la C, la cuota de venta de productos es menor.</p>
+</details>
+<details>
+<summary>¿Cuál es el tope de facturación del monotributo?</summary>
+<p>La categoría más alta, la K, permite facturar hasta <strong>$126.610.838,75</strong> en los últimos 12 meses (unos $10.550.903 por mes en promedio). Si lo superás quedás excluido y pasás al régimen general. La categoría A llega hasta $12.009.410,45 anuales.</p>
+</details>
+<details>
+<summary>¿Qué incluye la cuota del monotributo?</summary>
+<p>Tres componentes en un solo pago mensual: el impuesto integrado, el aporte jubilatorio (SIPA) y la obra social. La calculadora muestra la suma de los tres, que es lo que efectivamente pagás.</p>
+</details>
+<details>
+<summary>¿Cuándo hay que recategorizarse?</summary>
+<p>Dos veces por año, en <strong>febrero y agosto</strong>, hasta el día 5. Se miran los últimos 12 meses de actividad. Según ARCA, si seguís en la misma categoría o tenés menos de 6 meses de actividad no tenés que hacer nada. Más detalle en la <a href="/guias/monotributo-freelancers">guía de monotributo</a>.</p>
+</details>
+<details>
+<summary>¿Facturar al exterior cuenta para la categoría?</summary>
+<p>Sí. La exportación de servicios se factura con <a href="/guias/factura-e-exportacion">factura E</a> y suma a tu facturación anual igual que la local, convertida a pesos.</p>
+</details>
+</section>
+
+<section class="prosa" style="margin-top:2rem">
+<h2>Guías y herramientas relacionadas</h2>
+<ul>
+<li><a href="/guias/monotributo-freelancers">Monotributo para freelancers</a>: cómo leer la tabla y cuándo recategorizar.</li>
+<li><a href="/guias/factura-e-exportacion">Factura E</a>: cómo facturar exportación de servicios siendo monotributista.</li>
+<li><a href="/empleado-vs-freelance">Empleado vs freelance</a>: cuánto facturar para igualar un sueldo, con la cuota incluida.</li>
+</ul>
 </section>
 
 </div>

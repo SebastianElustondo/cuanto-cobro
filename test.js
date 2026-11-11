@@ -73,3 +73,20 @@ test("monotributo: categoría por facturación anual", () => {
   assert.equal(c.cuota, 64530.58);
   assert.equal(MONOTRIBUTO.categoria(126610838.76, true), null);
 });
+
+test("monotributo: las tablas escritas en el HTML coinciden con los datos", () => {
+  const fs = require("node:fs");
+  const pesos = (v) => "$" + Math.round(v).toString().replace(/\B(?=(\d{3})+$)/g, ".");
+  const filaDe = (html, cat) => {
+    const m = html.match(new RegExp(`<tr><th scope="row">${cat}</th>(.*?)</tr>`));
+    assert.ok(m, `falta la fila ${cat}`);
+    return m[1];
+  };
+  const calculadora = fs.readFileSync("monotributo.html", "utf8");
+  const guia = fs.readFileSync("guias/monotributo-freelancers.html", "utf8");
+  for (const [cat, tope, servicios, comercio] of MONOTRIBUTO.tabla) {
+    const esperadaCalc = `<td>${pesos(tope)}</td><td>${pesos(servicios)}</td><td>${pesos(comercio)}</td>`;
+    assert.equal(filaDe(calculadora, cat), esperadaCalc, `monotributo.html, categoría ${cat}`);
+    assert.equal(filaDe(guia, cat), `<td>${pesos(tope)}</td><td>${pesos(servicios)}</td>`, `guía, categoría ${cat}`);
+  }
+});
